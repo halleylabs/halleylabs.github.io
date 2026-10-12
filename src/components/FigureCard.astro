@@ -8,7 +8,7 @@ const fig = figureUrl(slug);
   <figure class="fcard reveal">
     <div class="fc-top t-label"><span>Fig. {String(no).padStart(2, "0")}</span><span>{title}</span></div>
     <div class="fc-art iso fig" data-theme="light" data-fig={slug} data-src={fig} data-mode="tour" role="img" aria-label={`${title}, drawn as a working machine`} />
-    <div class="fc-foot t-data"><span>Move your pointer over it</span><span data-readout></span></div>
+    <div class="fc-foot t-data"><span class="fc-hint">Move your pointer over it</span><span data-readout></span></div>
   </figure>
 )}
 
@@ -24,6 +24,9 @@ const fig = figureUrl(slug);
   .fc-art :global(svg) { width: 100%; height: 100%; }
   .fc-art { opacity: 0; transition: opacity .8s var(--ease); }
   .fc-art:global(.is-loaded) { opacity: 1; }
-  .fc-foot [data-readout] { color: var(--color-t1); text-align: right; }
+  .fc-foot [data-readout] { color: var(--color-t1); text-align: right; white-space: nowrap; margin-left: auto; }
+  .fc-hint { white-space: nowrap; }
+  /* on touch screens and narrow widths the readout gets the whole line */
+  @media (hover: none), (max-width: 640px) { .fc-hint { display: none; } }
   @media (max-width: 640px) { .fcard { padding: 16px 14px; } .fc-art { margin: 4px -6px; width: calc(100% + 12px); } }
 </style>

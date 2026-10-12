@@ -36,7 +36,10 @@ const { code, label = "Install", prompt = true } = Astro.props;
   .i1, .i2 { transition: opacity var(--t-mark) var(--ease), transform var(--t-mark) var(--ease); }
   .copy.done .i1 { opacity: 0; transform: scale(.6); }
   .copy.done .i2 { opacity: 1; transform: none; }
-  pre { margin: 0; padding: 20px 20px 22px; overflow-x: auto; font: 400 14.5px/1.75 var(--font-mono); white-space: pre-wrap; overflow-wrap: anywhere; }
+  pre { margin: 0; padding: 20px 20px 22px; overflow-x: auto; font: 400 14.5px/1.75 var(--font-mono); white-space: pre; overflow-wrap: normal; scrollbar-width: thin; scrollbar-color: rgba(255,255,255,.18) transparent; }
+  /* commands keep their lines whole and scroll sideways, so nothing breaks mid-flag */
+  pre { -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 32px), transparent); mask-image: linear-gradient(90deg, #000 calc(100% - 32px), transparent); }
+  pre::-webkit-scrollbar { height: 6px; } pre::-webkit-scrollbar-thumb { background: rgba(255,255,255,.18); border-radius: 3px; }
   .ln { display: block; }
   .pr { color: var(--color-d3); margin-right: 10px; user-select: none; }
   .cm { color: var(--color-d3); }
