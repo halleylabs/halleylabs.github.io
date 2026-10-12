@@ -75,11 +75,12 @@ h2{font-family:Fraunces,Georgia,serif;font-weight:480;font-size:clamp(30px,3.8vw
 .work-head p.body{margin:0;color:#3b3832;max-width:46ch;font-size:clamp(17px,1.4vw,19px)}
 .projects{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:clamp(32px,6vw,88px);border-bottom:1px solid var(--line)}
 .projects li{border-top:1px solid var(--line)}
-.projects a{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:baseline;gap:6px 16px;height:100%;padding:24px 0 28px;text-decoration:none}
+.projects a{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:baseline;align-content:start;gap:6px 16px;height:100%;padding:24px 0 28px;text-decoration:none}
 .p-name{font-family:Fraunces,Georgia,serif;font-weight:480;font-size:clamp(23px,2.1vw,27px);line-height:1.15;letter-spacing:-.01em}
 .p-lang{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
 .p-desc{grid-column:1/-1;color:#3b3832;font-size:16px;line-height:1.55;max-width:50ch}
-.p-arrow{width:16px;height:16px;align-self:center}
+.more{margin:32px 0 0}
+.link{font-weight:540;text-decoration:none;border-bottom:1px solid currentColor;padding-bottom:2px}
 .projects a:hover .p-name,.projects a:focus-visible .p-name{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:5px}
 
 /* footer */
@@ -144,18 +145,25 @@ footer a{text-decoration:none}footer a:hover{color:var(--paper)}
    <div class="work-head">
     <p class="eyebrow">Projects</p>
     <h2 id="work-h">Open source, shipping now.</h2>
-    <p class="body">Pieces of the agent stack we are building, released as we go.</p>
+    <p class="body">Agents, the tools around them, and the fast libraries they run on. All open source, released as we go.</p>
    </div>
    <ul class="projects">
    <li><a href="https://github.com/halleylabs/tring"><span class="p-name">Tring</span><span class="p-lang">Python</span><span class="p-desc">Define a voice agent once in YAML, then run it as a cascade, speech-to-speech, or hybrid pipeline.</span></a></li>
+   <li><a href="https://github.com/halleylabs/faultline"><span class="p-name">faultline</span><span class="p-lang">TypeScript</span><span class="p-desc">A live architecture map for any codebase and any coding agent. See what each change does to the structure, and stop it crossing the lines you drew.</span></a></li>
    <li><a href="https://github.com/halleylabs/witness"><span class="p-name">Witness</span><span class="p-lang">Rust</span><span class="p-desc">A recording cache for model APIs. Repeat calls cost nothing, crashed runs resume, and every call leaves a verifiable record.</span></a></li>
+   <li><a href="https://github.com/halleylabs/quicky-wiki"><span class="p-name">Quicky Wiki</span><span class="p-lang">TypeScript</span><span class="p-desc">Turns a pile of documents into a living knowledge base, with confidence-scored claims, contradiction tracking and a dashboard to explore it.</span></a></li>
    <li><a href="https://github.com/halleylabs/agentreplay"><span class="p-name">AgentReplay</span><span class="p-lang">JavaScript</span><span class="p-desc">A trace protocol and replay harness that turns every failed agent run into a replayable test.</span></a></li>
+   <li><a href="https://github.com/halleylabs/voila"><span class="p-name">voila</span><span class="p-lang">JavaScript</span><span class="p-desc">Demos that record themselves. Paste a URL and get a narrated, zoom-animated MP4, made entirely on your machine.</span></a></li>
    <li><a href="https://github.com/halleylabs/pact"><span class="p-name">Pact</span><span class="p-lang">Go</span><span class="p-desc">A cryptographic protocol for agents to prove who they are, who sent them, and what they are allowed to do.</span></a></li>
+   <li><a href="https://github.com/halleylabs/unclaude"><span class="p-name">UnClaude</span><span class="p-lang">Python</span><span class="p-desc">An open-source coding agent that runs on your machine with any model, plus a web dashboard to watch it work.</span></a></li>
    <li><a href="https://github.com/halleylabs/guardian"><span class="p-name">Guardian</span><span class="p-lang">JavaScript</span><span class="p-desc">A judgment sidecar that reviews every agent action before it runs, at a fraction of the agent’s cost.</span></a></li>
    <li><a href="https://github.com/halleylabs/fasthands"><span class="p-name">fasthands</span><span class="p-lang">TypeScript</span><span class="p-desc">Model-agnostic computer use with 91% fewer tokens than a screenshot loop. Works with a 4B model on a laptop.</span></a></li>
    <li><a href="https://github.com/halleylabs/context-broker"><span class="p-name">context-broker</span><span class="p-lang">Claude Code</span><span class="p-desc">Answers big-file reads with an exact structural outline: 80 to 95% fewer tokens in about a millisecond, all on your machine.</span></a></li>
-   <li><a href="https://github.com/halleylabs"><span class="p-name">Everything else</span><svg class="p-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg><span class="p-desc">New work lands on GitHub first. Watch the org to see it as it ships.</span></a></li>
+   <li><a href="https://github.com/halleylabs/samemark"><span class="p-name">samemark</span><span class="p-lang">JavaScript</span><span class="p-desc">The same Markdown syntax tree as remark-parse, about 10x faster, with an incremental parser for streamed text.</span></a></li>
+   <li><a href="https://github.com/halleylabs/sheetstream"><span class="p-name">sheetstream</span><span class="p-lang">Rust</span><span class="p-desc">Read and write XLSX files of any size from Node.js in constant memory.</span></a></li>
+   <li><a href="https://github.com/halleylabs/purify-edge"><span class="p-name">purify-edge</span><span class="p-lang">JavaScript</span><span class="p-desc">DOMPurify without jsdom: byte-identical output in about 65 KB gzipped, running on Cloudflare Workers.</span></a></li>
    </ul>
+   <p class="more"><a class="link" href="https://github.com/halleylabs">Everything on GitHub</a></p>
   </div>
  </section>
 </main>
