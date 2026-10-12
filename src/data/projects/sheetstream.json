@@ -1,0 +1,86 @@
+{
+  "slug": "sheetstream",
+  "name": "sheetstream",
+  "repo": "halleylabs/sheetstream",
+  "category": "Libraries",
+  "language": "Rust",
+  "license": "MIT",
+  "version": "0.3.0",
+  "tagline": "Read and write million-row XLSX and CSV files in Node.js in about 80 MB of memory",
+  "summary": "sheetstream reads and writes XLSX and CSV from Node.js without holding the rows in JavaScript. A Rust core does the parsing and zipping and rows cross in batches, so a million-row export fits in a small serverless function. It takes any iterable or async iterable as a source, so a database cursor or a generator works as is.",
+  "metrics": [
+    {
+      "value": "82 MB",
+      "label": "peak memory writing 1M rows by 10 columns, where common JavaScript libraries need 749 MB to 3.3 GB",
+      "source": "README.md: ![Writing 1M rows to xlsx: sheetstream 82 MB, exceljs streaming 749 MB, SheetJS 3.3 GB, exceljs default crashes](assets/memory.png)"
+    },
+    {
+      "value": "4x",
+      "label": "faster reading 1M rows: 2.4 s instead of 9.1 s",
+      "source": "README.md: The honest summary: memory is a very large win, reading is about 4 times faster than exceljs streaming, and writing is about 2 times faster than the best JS option."
+    },
+    {
+      "value": "2x",
+      "label": "faster writing 1M rows: 5.5 s instead of 12.3 s",
+      "source": "README.md: The honest summary: memory is a very large win, reading is about 4 times faster than exceljs streaming, and writing is about 2 times faster than the best JS option."
+    }
+  ],
+  "features": [
+    "writeXlsx takes any Iterable or AsyncIterable of arrays or objects, and readXlsx is an async iterator of batches",
+    "Streaming CSV read and write, plus csvStream, a Node Readable with real backpressure for HTTP responses",
+    "XLSX formatting: header style, column widths, per-column number formats, frozen header row and header filter, at no extra memory",
+    "Multiple sheets, choose by name or index, with xlsxStream and toBuffer for HTTP and small outputs",
+    "Prebuilt binaries for macOS (arm64, x64), Linux (x64 glibc, x64 musl, arm64 glibc) and Windows (x64), nothing to compile on install"
+  ],
+  "how_it_works": [
+    "Native Rust code (through napi-rs) does the XML, zip and CSV work, so the rows never become JavaScript objects in bulk.",
+    "Rows go in and out in batches of 1000 by default, and a parser thread runs a few batches ahead of your loop.",
+    "Writing in constant mode streams the sheet XML to a temp file and compresses it into the output, so the cost is disk, not RAM."
+  ],
+  "install": "npm install sheetstream",
+  "quickstart": "import { writeXlsx, readXlsx } from 'sheetstream'\n\nfunction* rows() {\n  for (let i = 0; i < 1_000_000; i++) yield { id: i, name: `user ${i}`, joined: new Date(), active: i % 2 === 0 }\n}\n\nawait writeXlsx('users.xlsx', rows())            // resolves to { rows, bytes }\n\nfor await (const batch of readXlsx('users.xlsx')) {\n  for (const user of batch) { /* user: { id, name, joined, active } */ }\n}",
+  "links": {
+    "github": "https://github.com/halleylabs/sheetstream",
+    "site": null,
+    "docs": "https://github.com/halleylabs/sheetstream/blob/main/docs/recipes.md",
+    "npm": "https://www.npmjs.com/package/sheetstream",
+    "pypi": null,
+    "crates": null,
+    "demo": null
+  },
+  "media": [
+    {
+      "path": "/Users/anzalhussainabidi/personal/xlsx-native/assets/memory.png",
+      "kind": "png",
+      "width": 3200,
+      "height": 1800,
+      "bytes": 207148,
+      "shows": "Log-scale bar chart, titled 'Write 1M rows to .xlsx: 82 MB vs a crash': peak memory for sheetstream 82 MB (5.5 s), exceljs streaming 749 MB (12.3 s), SheetJS dense 3.3 GB (9.1 s), exceljs default crash; with 128 MB and 1 GB serverless limits marked; footer says sheetstream reads the same file in 2.4 s and 93 MB"
+    },
+    {
+      "path": "/Users/anzalhussainabidi/personal/xlsx-native/assets/demo.gif",
+      "kind": "gif",
+      "width": 1400,
+      "height": 370,
+      "bytes": 96637,
+      "shows": "Terminal clip, 14.4 s: node capped at a 1024 MB heap writes 1M rows x 10 columns; exceljs default workbook dies with heap out of memory, sheetstream writes all rows in 5.3 s at 79 MB peak RSS"
+    },
+    {
+      "path": "/Users/anzalhussainabidi/personal/sheetstream-launch/demo.mp4",
+      "kind": "mp4",
+      "width": 1400,
+      "height": 370,
+      "bytes": 124297,
+      "shows": "Same terminal clip as demo.gif, as video"
+    },
+    {
+      "path": "/Users/anzalhussainabidi/personal/sheetstream-launch/demo-x.mp4",
+      "kind": "mp4",
+      "width": 1600,
+      "height": 900,
+      "bytes": 130815,
+      "shows": "Same terminal clip re-framed 16:9 on a black background (14.4 s); good for a wide hero or video block"
+    }
+  ],
+  "notes": "Hero: assets/memory.png (3200x1800, dark theme, sheetstream bar in copper). Chart names competitors (exceljs, SheetJS) inside it; if the site must not show competitor names, use the terminal demo clip instead (it also names exceljs). The 'honest summary' sentence quoted for metrics 2 and 3 is the README's own wording. Numbers are from bench/RESULTS.md (Apple M5 Max, Node 24.20, single runs, 1M rows x 10 columns, run 2026-10-05 against sheetstream 0.1.0); not re-run here. Derived ratios: write 12.3/5.5 = 2.2x, read 9.1/2.4 = 3.8x, memory 749/82 = 9.1x vs exceljs streaming and 3270/82 = 40x vs SheetJS (computed from the README tables, not stated there; the stated claims are used as metrics). The demo clip numbers (5.3 s, 79 MB) come from the recorded clip and README demo caption ('exceljs runs out of heap at 1 GB while sheetstream writes 1M rows in 79 MB'). Version 0.3.0 verified via npm view, git tag and GitHub release. Language field: the core is Rust (napi-rs) with a JavaScript API; GitHub reports the repo language as JavaScript. Not verified: Bun support (README says untested); Linux arm64 musl not built. Local checkout dir is xlsx-native; launch kit is in personal/sheetstream-launch (has chart.png identical to assets/memory.png, demo.gif, demo.mp4, demo-x.mp4)."
+}

@@ -1,0 +1,48 @@
+{
+  "slug": "guardian",
+  "name": "guardian",
+  "repo": "halleylabs/guardian",
+  "category": "Agent infrastructure",
+  "language": "JavaScript",
+  "license": "MIT",
+  "version": null,
+  "tagline": "Reviews every agent action before it runs, in ~400ms at about $0.00001 each",
+  "summary": "guardian is a judgment sidecar that wraps the moment between an agent proposing an action and executing it. One call fans out four parallel judgments (destructive, off-task, injection, leak) that are task-aware, so the same force push scores high on a shared branch and low on the user's own. It caught every hazard in a 44-action benchmark with zero legitimate work blocked, and it fails open so it cannot take down the harness it protects.",
+  "metrics": [
+    {
+      "value": "100%",
+      "label": "of hazardous actions caught, with 0% of legitimate work blocked",
+      "source": "README.md: | **guardian** (risk >= 0.5) | **100%** | **0%** | **0%** |  and  | regex denylist | 73% | 36% | 70% |"
+    },
+    {
+      "value": "~400ms",
+      "label": "per action at about $0.00001, roughly 1000x cheaper than the agent it watches",
+      "source": "README.md: Latency ~400ms p50. Cost about $0.00001 per action."
+    }
+  ],
+  "features": [
+    "Task-aware verdicts: the same git push --force scores 0.87 on a shared main and 0.21 on the user's own feature branch",
+    "Four parallel judgments per action: destructive, off_task, injection and leak",
+    "Code-owned policy with tunable thresholds: block at risk >= 0.7, ask at >= 0.4, allow below",
+    "Fail-open by design, so a judge error never stops the agent loop",
+    "Ships the 44-case benchmark and a 20-case adversarial red-team round with one-command runners"
+  ],
+  "how_it_works": [
+    "Your harness calls review() with the task, recent context and the proposed action before executing it.",
+    "One call to the Jev judge fans out four judgments in parallel, about 400ms in total, and returns a probability for each risk.",
+    "Code applies your thresholds to turn the highest risk into allow, ask or block, and any failure of the judge lets the action pass and is reported."
+  ],
+  "install": null,
+  "quickstart": "import { review } from './src/guardian.js';\nconst verdict = await review({\n  task: 'Fix the failing unit test in utils.test.js',\n  context: 'Ran tests, one failure in date parsing. No cleanup requested.',\n  action: { tool: 'bash', args: 'rm -rf ~/' },\n});\n// { verdict: 'block', risk: 0.99, ... }",
+  "links": {
+    "github": "https://github.com/halleylabs/guardian",
+    "site": null,
+    "docs": null,
+    "npm": null,
+    "pypi": null,
+    "crates": null,
+    "demo": null
+  },
+  "media": [],
+  "notes": "No media assets exist in the repo (no images, gif or video) and the GitHub repo has no releases or tags. Not published to npm (package.json name is agent-guardian, version 0.1.0; npm view returns 404), so version is null and install is null; the README usage is import from a local checkout. The site builder should render a code or terminal-style hero instead of media. The hard-negative column (0% blocked vs 70% for the denylist) is also in the README table if a fourth figure is wanted. The README's honest-limits section notes the 44 cases were written by the judge's author and that the one red-team miss is a typosquat; these are deliberately kept out of the site copy per the owner's rules. Benchmarks need a TypeSafe API key; without one the client uses a stub whose numbers are noise."
+}

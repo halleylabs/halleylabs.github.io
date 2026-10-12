@@ -1,0 +1,49 @@
+---
+import Base from "../../layouts/Base.astro";
+import Plate from "../../components/Plate.astro";
+import { projects, CATEGORY_ORDER } from "../../lib/projects";
+const groups = CATEGORY_ORDER.map((c) => ({ c, items: projects.filter((p) => p.category === c) })).filter((g) => g.items.length);
+let n = 0;
+---
+<Base title="Open source | Halley" description="Every open-source project from Halley: agents, the tools around them, and the fast libraries they run on.">
+  <section class="head"><div class="frame">
+    <p class="t-label lab reveal">Open source</p>
+    <h1 class="t-h1 reveal" data-delay="1">Fourteen projects, one bench.</h1>
+    <p class="t-lede sub reveal" data-delay="2">Agents, the tools around them, and the fast libraries they run on. Almost all of it is MIT or Apache licensed, and every number on these pages links to where it comes from.</p>
+    <p class="jump reveal t-data" data-delay="3">{groups.map((g) => <span>{g.c} <b>{g.items.length}</b></span>)}</p>
+  </div></section>
+  <section class="grp"><div class="frame">
+    <div class="plates">
+      {projects.map((p, i) => <Plate project={p} index={i + 1} />)}
+      <a class="plate-open reveal" href="mailto:hello@halleylabs.dev?subject=A%20project%20for%20Halley">
+        <span class="t-label">Open</span>
+        <span class="ring" aria-hidden="true">+</span>
+        <span class="t-h3">Your project here</span>
+        <span class="ol">Building something you want to keep alive in the open? Bring it to the bench.</span>
+      </a>
+    </div>
+  </div></section>
+</Base>
+
+<style>
+  .head { padding: clamp(150px, 16vw, 210px) 0 clamp(56px, 6vw, 88px); }
+  .lab { color: var(--color-t3); margin-bottom: 22px; }
+  .sub { color: var(--color-t2); margin-top: 26px; }
+  .jump { display: flex; flex-wrap: wrap; gap: 6px 28px; margin-top: 40px; padding-top: 22px; border-top: 1px solid var(--color-rule); color: var(--color-t3); }
+  .jump b { font-weight: 500; color: var(--color-t1); margin-left: 4px; }
+  .plate-open { display: flex; flex-direction: column; padding: 26px; min-height: 420px; border-right: 1px solid var(--color-rule); border-bottom: 1px solid var(--color-rule); color: var(--color-t3); transition: background-color var(--t-mark) var(--ease); }
+  .plate-open:hover { background: rgba(255,255,255,.45); }
+  .plate-open .ring { margin: 34px auto 30px; width: 120px; height: 120px; border-radius: 50%; display: grid; place-items: center; border: 1px dashed var(--color-t3); font: 300 46px/1 var(--font-sans); transition: transform .9s var(--ease); }
+  .plate-open:hover .ring { transform: rotate(90deg); }
+  .plate-open .t-h3 { margin-top: auto; color: var(--color-t1); }
+  .plate-open .ol { margin-top: 10px; font-size: 15.5px; line-height: 1.5; color: var(--color-t2); }
+  .jump a { display: inline-flex; align-items: baseline; gap: 8px; padding: 6px 0; font-size: 15px; color: var(--color-t2); background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat; transition: background-size var(--t-mark) var(--ease), color var(--t-hover) var(--ease); }
+  .jump a:hover { color: var(--color-t1); background-size: 100% 1px; }
+  .jump .t-data { color: var(--color-t3); }
+  .grp { padding-bottom: clamp(88px, 9vw, 130px); }
+  .gh { display: flex; align-items: baseline; justify-content: space-between; padding-bottom: 18px; }
+  .gh .t-data { color: var(--color-t3); }
+  .plates { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--color-rule); border-left: 1px solid var(--color-rule); }
+  @media (max-width: 980px) { .plates { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 640px) { .plates { grid-template-columns: 1fr; } }
+</style>

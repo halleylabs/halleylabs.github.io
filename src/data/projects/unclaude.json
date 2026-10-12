@@ -1,0 +1,37 @@
+{
+  "slug": "unclaude",
+  "name": "UnClaude",
+  "repo": "halleylabs/unclaude",
+  "category": "Agents",
+  "language": "Python",
+  "license": "Apache-2.0",
+  "version": "0.7.0",
+  "tagline": "An open-source AI engineer that runs on your machine, with any model you choose",
+  "summary": "UnClaude is an autonomous coding agent you install with pipx and point at whichever model you like, including local ones with no API costs. It routes each request to a model that fits the job, remembers across sessions, and can keep working in the background on a task queue. It ships with a web dashboard, messaging, a multi-agent swarm, and audit logging of every tool call.",
+  "metrics": [],
+  "features": [
+    "Any LLM through LiteLLM, including fully offline local models",
+    "Smart routing with auto, eco, premium and free profiles to match model cost to request difficulty",
+    "Autonomous daemon with a priority task queue and a proactive behaviour file the agent reads live",
+    "Ralph Mode plans, codes, runs your feedback command and fixes its own failures",
+    "Web dashboard, Telegram and WhatsApp messaging, usage budgets and a sandboxed, audited tool layer"
+  ],
+  "how_it_works": [
+    "Each request is scored on length, code, reasoning markers and conversation depth, then sent to the cheapest model tier that can handle it.",
+    "A hierarchical memory stores resources, items and categories with salience scoring, so important context surfaces first.",
+    "A background daemon takes tasks from the CLI, files, webhooks, cron or git hooks and runs them under capability-based security profiles."
+  ],
+  "install": "pipx install unclaude",
+  "quickstart": "pipx install unclaude\nunclaude setup\nunclaude \"Build me a REST API in FastAPI\"\nunclaude web",
+  "links": {
+    "github": "https://github.com/halleylabs/unclaude",
+    "site": null,
+    "docs": null,
+    "npm": null,
+    "pypi": "https://pypi.org/project/unclaude/",
+    "crates": null,
+    "demo": null
+  },
+  "media": [],
+  "notes": "No usable media (web-ui/public only has default Next.js SVG icons; no screenshots or gifs). Hero suggestion: render the README's architecture diagram or the soul YAML as a styled block, or screenshot the 9-page dashboard by running unclaude web locally. Version 0.7.0 confirmed on PyPI and as the latest GitHub release (v0.7.0, 2026-02-20); the README badge still says 0.6.0 and is stale. The repo has no benchmarks. The only numeric claim I could source is the routing price spread: it is a price table in the README (and in src/unclaude/routing/router.py, where the figures are approximate per-1K input costs and the top reasoning tier also lists cheaper options), not a measured savings result, so do not present it as a measured percentage. The router docstring says 70 to 90% savings but nothing in the repo measures it, so it was left out. Feature counts (providers, pages, capabilities) were intentionally excluded from metrics. The README header uses an emoji and dashes; none were copied into this file."
+}

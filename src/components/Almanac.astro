@@ -1,0 +1,45 @@
+---
+import Icon from "./Icon.astro";
+import { releases, fmtDate } from "../lib/projects";
+interface Props { limit?: number }
+const { limit = 5 } = Astro.props;
+const rows = releases.slice(0, limit);
+---
+<ol class="alm" data-reveal-rules>
+  {rows.map(({ project: p, release: r }) => (
+    <li>
+      <a href={r.url} rel="noopener">
+        <time class="t-data" datetime={r.date}>{fmtDate(r.date)}</time>
+        <b>{p.name}</b>
+        <span class="t-data v">{r.tag}</span>
+        <span class="n">{p.tagline}</span>
+        <span class="arw"><Icon name="arrow-up-right" size={17} /></span>
+      </a>
+    </li>
+  ))}
+</ol>
+
+<style>
+  .alm { list-style: none; margin: 0; padding: 0; border-bottom: 1px solid var(--color-rule); }
+  li { position: relative; }
+  li::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 1px; background: var(--color-rule); transform: scaleX(0); transform-origin: left; transition: transform 1.2s var(--ease); }
+  .alm:global(.is-in) li::before { transform: scaleX(1); }
+  .alm:global(.is-in) li:nth-child(2)::before { transition-delay: 70ms; } .alm:global(.is-in) li:nth-child(3)::before { transition-delay: 140ms; } .alm:global(.is-in) li:nth-child(4)::before { transition-delay: 210ms; } .alm:global(.is-in) li:nth-child(5)::before { transition-delay: 280ms; }
+  a { display: grid; grid-template-columns: 2fr 3fr 1.6fr 6fr 0.4fr; column-gap: var(--col-gap); align-items: baseline; padding: 24px 0 25px; position: relative; overflow: hidden; }
+  time, .v { color: var(--color-t3); }
+  b { font: 400 clamp(22px, 2vw, 27px)/1.15 var(--font-serif); font-variation-settings: "opsz" 72, "SOFT" 40; letter-spacing: -0.012em; transition: transform .55s var(--ease); }
+  .n { color: var(--color-t2); }
+  .arw { justify-self: end; color: var(--color-t3); transition: transform var(--t-mark) var(--ease), color var(--t-hover) var(--ease); }
+  /* on hover, a comet's streak runs along the row's rule */
+  a::after { content: ""; position: absolute; left: 0; bottom: -1px; height: 1px; width: 32%; background: linear-gradient(90deg, rgba(31,29,26,0), rgba(31,29,26,.75) 85%, #000); transform: translateX(-110%); }
+  @media (hover: hover) and (pointer: fine) {
+    a:hover::after { animation: streak 1.05s var(--ease) forwards; }
+    a:hover b { transform: translateX(6px); }
+    a:hover .arw { transform: translate(2px, -2px); color: var(--color-t1); }
+  }
+  @keyframes streak { to { transform: translateX(330%); } }
+  @media (max-width: 820px) {
+    a { grid-template-columns: 1fr auto; row-gap: 6px; padding: 20px 0; }
+    time { grid-column: 1 / -1; } .n { grid-column: 1 / -1; } .arw { display: none; }
+  }
+</style>

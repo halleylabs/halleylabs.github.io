@@ -1,0 +1,213 @@
+{
+  "halleylabs/agentreplay": {
+    "stars": 3,
+    "pushed_at": "2026-10-07T19:28:18Z",
+    "releases": [
+      {
+        "tag": "v0.2.0-alpha.1",
+        "name": "AgentReplay v0.2.0-alpha.1",
+        "date": "2026-05-06",
+        "url": "https://github.com/halleylabs/agentreplay/releases/tag/v0.2.0-alpha.1"
+      }
+    ]
+  },
+  "halleylabs/context-broker": {
+    "stars": 1,
+    "pushed_at": "2026-10-07T19:28:22Z",
+    "releases": []
+  },
+  "halleylabs/fasthands": {
+    "stars": 0,
+    "pushed_at": "2026-10-07T19:28:25Z",
+    "releases": []
+  },
+  "halleylabs/faultline": {
+    "stars": 15,
+    "pushed_at": "2026-10-12T17:58:08Z",
+    "releases": [
+      {
+        "tag": "v0.5.1",
+        "name": "v0.5.1",
+        "date": "2026-09-27",
+        "url": "https://github.com/halleylabs/faultline/releases/tag/v0.5.1"
+      },
+      {
+        "tag": "v0.5.0",
+        "name": "v0.5.0",
+        "date": "2026-09-27",
+        "url": "https://github.com/halleylabs/faultline/releases/tag/v0.5.0"
+      },
+      {
+        "tag": "v0.4.0",
+        "name": "v0.4.0",
+        "date": "2026-09-26",
+        "url": "https://github.com/halleylabs/faultline/releases/tag/v0.4.0"
+      },
+      {
+        "tag": "v0.3.1",
+        "name": "v0.3.1",
+        "date": "2026-09-26",
+        "url": "https://github.com/halleylabs/faultline/releases/tag/v0.3.1"
+      },
+      {
+        "tag": "v0.3.0",
+        "name": "v0.3.0",
+        "date": "2026-09-26",
+        "url": "https://github.com/halleylabs/faultline/releases/tag/v0.3.0"
+      }
+    ]
+  },
+  "halleylabs/guardian": {
+    "stars": 0,
+    "pushed_at": "2026-10-07T19:28:27Z",
+    "releases": []
+  },
+  "halleylabs/pact": {
+    "stars": 0,
+    "pushed_at": "2026-10-07T19:28:29Z",
+    "releases": [
+      {
+        "tag": "v0.1.1",
+        "name": "v0.1.1: Sovereign Agent Authentication Protocol",
+        "date": "2026-02-20",
+        "url": "https://github.com/halleylabs/pact/releases/tag/v0.1.1"
+      }
+    ]
+  },
+  "halleylabs/purify-edge": {
+    "stars": 0,
+    "pushed_at": "2026-10-12T18:00:43Z",
+    "releases": [
+      {
+        "tag": "v0.1.2",
+        "name": "v0.1.2",
+        "date": "2026-10-07",
+        "url": "https://github.com/halleylabs/purify-edge/releases/tag/v0.1.2"
+      }
+    ]
+  },
+  "halleylabs/quicky-wiki": {
+    "stars": 24,
+    "pushed_at": "2026-10-12T18:04:01Z",
+    "releases": [
+      {
+        "tag": "v0.1.2",
+        "name": "v0.1.2",
+        "date": "2026-04-14",
+        "url": "https://github.com/halleylabs/quicky-wiki/releases/tag/v0.1.2"
+      }
+    ]
+  },
+  "halleylabs/samemark": {
+    "stars": 0,
+    "pushed_at": "2026-10-12T17:10:02Z",
+    "releases": []
+  },
+  "halleylabs/sheetstream": {
+    "stars": 1,
+    "pushed_at": "2026-10-12T17:10:04Z",
+    "releases": [
+      {
+        "tag": "v0.3.0",
+        "name": "v0.3.0",
+        "date": "2026-10-09",
+        "url": "https://github.com/halleylabs/sheetstream/releases/tag/v0.3.0"
+      },
+      {
+        "tag": "v0.2.0",
+        "name": "v0.2.0",
+        "date": "2026-10-06",
+        "url": "https://github.com/halleylabs/sheetstream/releases/tag/v0.2.0"
+      }
+    ]
+  },
+  "halleylabs/tring": {
+    "stars": 1,
+    "pushed_at": "2026-10-07T19:28:31Z",
+    "releases": [
+      {
+        "tag": "v0.4.1",
+        "name": "tring 0.4.1",
+        "date": "2026-09-19",
+        "url": "https://github.com/halleylabs/tring/releases/tag/v0.4.1"
+      },
+      {
+        "tag": "v0.4.0",
+        "name": "tring 0.4.0",
+        "date": "2026-09-19",
+        "url": "https://github.com/halleylabs/tring/releases/tag/v0.4.0"
+      },
+      {
+        "tag": "v0.3.0",
+        "name": "tring 0.3.0",
+        "date": "2026-09-19",
+        "url": "https://github.com/halleylabs/tring/releases/tag/v0.3.0"
+      },
+      {
+        "tag": "v0.2.0",
+        "name": "tring 0.2.0",
+        "date": "2026-09-18",
+        "url": "https://github.com/halleylabs/tring/releases/tag/v0.2.0"
+      },
+      {
+        "tag": "v0.1.0",
+        "name": "tring 0.1.0",
+        "date": "2026-09-18",
+        "url": "https://github.com/halleylabs/tring/releases/tag/v0.1.0"
+      }
+    ]
+  },
+  "halleylabs/unclaude": {
+    "stars": 3,
+    "pushed_at": "2026-10-12T17:24:10Z",
+    "releases": [
+      {
+        "tag": "v0.7.0",
+        "name": "v0.7.0: Pact Sovereign Identity + Daemon Robustness",
+        "date": "2026-02-20",
+        "url": "https://github.com/halleylabs/unclaude/releases/tag/v0.7.0"
+      }
+    ]
+  },
+  "halleylabs/voila": {
+    "stars": 4,
+    "pushed_at": "2026-10-12T18:06:49Z",
+    "releases": []
+  },
+  "halleylabs/witness": {
+    "stars": 0,
+    "pushed_at": "2026-10-07T19:30:35Z",
+    "releases": [
+      {
+        "tag": "v0.3.0",
+        "name": "witness v0.3.0: faster journal, oracles, fleet mode, exec recording",
+        "date": "2026-09-11",
+        "url": "https://github.com/halleylabs/witness/releases/tag/v0.3.0"
+      },
+      {
+        "tag": "v0.2.1",
+        "name": "witness v0.2.1: anchoring works against the real Rekor",
+        "date": "2026-09-11",
+        "url": "https://github.com/halleylabs/witness/releases/tag/v0.2.1"
+      },
+      {
+        "tag": "v0.2.0",
+        "name": "witness v0.2.0: anchor, standard export, observability, MCP recording",
+        "date": "2026-09-11",
+        "url": "https://github.com/halleylabs/witness/releases/tag/v0.2.0"
+      },
+      {
+        "tag": "v0.1.2",
+        "name": "witness v0.1.2 — concurrency fix + measured overhead",
+        "date": "2026-09-10",
+        "url": "https://github.com/halleylabs/witness/releases/tag/v0.1.2"
+      },
+      {
+        "tag": "v0.1.1",
+        "name": "witness v0.1.1",
+        "date": "2026-09-09",
+        "url": "https://github.com/halleylabs/witness/releases/tag/v0.1.1"
+      }
+    ]
+  }
+}

@@ -1,0 +1,29 @@
+---
+import { figureUrl } from "../lib/figures";
+interface Props { slug: string; no: number; title: string }
+const { slug, no, title } = Astro.props;
+const fig = figureUrl(slug);
+---
+{fig && (
+  <figure class="fcard reveal">
+    <div class="fc-top t-label"><span>Fig. {String(no).padStart(2, "0")}</span><span>{title}</span></div>
+    <div class="fc-art iso fig" data-theme="light" data-fig={slug} data-src={fig} data-mode="tour" role="img" aria-label={`${title}, drawn as a working machine`} />
+    <div class="fc-foot t-data"><span>Move your pointer over it</span><span data-readout></span></div>
+  </figure>
+)}
+
+<script>
+  import { mountFigures } from "../lib/figures-client";
+  mountFigures();
+</script>
+
+<style>
+  .fcard { position: relative; margin: 0; padding: 22px 24px 20px; border: 1px solid var(--color-rule); border-radius: var(--r-3, 8px); background: linear-gradient(180deg, rgba(255,255,255,.55), rgba(255,255,255,0) 60%); }
+  .fc-top, .fc-foot { display: flex; justify-content: space-between; gap: 16px; color: var(--color-t3); }
+  .fc-art { width: min(100%, 880px); margin: 8px auto; aspect-ratio: 3 / 2; }
+  .fc-art :global(svg) { width: 100%; height: 100%; }
+  .fc-art { opacity: 0; transition: opacity .8s var(--ease); }
+  .fc-art:global(.is-loaded) { opacity: 1; }
+  .fc-foot [data-readout] { color: var(--color-t1); text-align: right; }
+  @media (max-width: 640px) { .fcard { padding: 16px 14px; } .fc-art { margin: 4px -6px; width: calc(100% + 12px); } }
+</style>

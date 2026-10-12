@@ -1,0 +1,113 @@
+{
+  "slug": "voila",
+  "name": "voila",
+  "repo": "halleylabs/voila",
+  "category": "Developer tools",
+  "language": "JavaScript",
+  "license": "MIT",
+  "version": "0.8.0",
+  "tagline": "Paste a URL, get a narrated, zoom-animated demo video made entirely on your machine",
+  "summary": "voila drives its own Chromium, records a product tour with an animated cursor and auto-zoom, narrates it with an open-source voice model on the CPU, and writes the MP4. It needs no screen-recording permission, no cloud and no API keys, and it embeds the script that rebuilt the video inside the file so anyone can fork or retarget the demo. Agents can plan, record, review their own frames and re-record through its MCP server.",
+  "metrics": [
+    {
+      "value": "6 languages",
+      "label": "of on-device narration in a single recording, switched per step with one line",
+      "source": "README.md: **Six languages, mixable in one demo.** Kokoro speaks English (US/UK), Spanish, French, Italian, Portuguese and Hindi on every platform, on-device."
+    },
+    {
+      "value": "~80 MB",
+      "label": "voice model narrates on a CPU, with no cloud service and no API key",
+      "source": "README.md: ~80MB quantized, near-human quality, runs on CPU (context: Kokoro-82M narration, fully on-device, no cloud, no API keys)"
+    }
+  ],
+  "features": [
+    "One command from URL to narrated MP4 with an automatic tour, or a YAML script for custom flows",
+    "Narration and burned-in captions generated on-device, with a different voice or language per step",
+    "The rebuild recipe is embedded in the MP4, so voila fork can retarget or recreate any voila demo",
+    "MCP server with outline, record and review tools so an agent can watch its own video and fix it",
+    "Desktop, mobile and tablet viewports; cookie banners are dismissed before recording, preferring reject"
+  ],
+  "how_it_works": [
+    "Capture: a Chromium instance that voila owns streams frames over the DevTools Protocol at 2x pixel ratio while an animated cursor and every move and zoom are logged to a timeline.",
+    "Tour and narration: an auto tour or a YAML script supplies captions and narration, which the on-device voice model synthesizes first so each step lasts as long as its spoken clip.",
+    "Render: the timeline is replayed over the captured frames with eased zoom following the cursor and piped through ffmpeg into an H.264 MP4 with the recipe in its metadata."
+  ],
+  "install": "npx -y voila-recorder record https://yourapp.com",
+  "quickstart": "npx -y voila-recorder doctor                      # pre-download chromium + voice model\nnpx -y voila-recorder record https://yourapp.com  # auto tour -> narrated MP4",
+  "links": {
+    "github": "https://github.com/halleylabs/voila",
+    "site": "https://voila.anzalabidi.dev",
+    "docs": "https://voila.anzalabidi.dev/llms.txt",
+    "npm": "https://www.npmjs.com/package/voila-recorder",
+    "pypi": null,
+    "crates": null,
+    "demo": null
+  },
+  "media": [
+    {
+      "path": "https://voila.anzalabidi.dev/demo-tour.mp4",
+      "kind": "mp4",
+      "width": 1920,
+      "height": 1200,
+      "bytes": 7219949,
+      "shows": "106 second narrated tour of voila's own website, recorded by voila with its own recipe, switching from English to Spanish and French partway (best hero video)"
+    },
+    {
+      "path": "https://voila.anzalabidi.dev/poster-tour.jpg",
+      "kind": "jpg",
+      "width": 1200,
+      "height": 750,
+      "bytes": 41446,
+      "shows": "poster frame for the tour video (best hero still)"
+    },
+    {
+      "path": "https://voila.anzalabidi.dev/demo-languages.mp4",
+      "kind": "mp4",
+      "width": 1920,
+      "height": 1200,
+      "bytes": 2605254,
+      "shows": "35 second recording narrated in several languages from one on-device model (shortest, good for a loop)"
+    },
+    {
+      "path": "https://voila.anzalabidi.dev/poster-languages.jpg",
+      "kind": "jpg",
+      "width": 1200,
+      "height": 750,
+      "bytes": 41506,
+      "shows": "poster for the languages demo"
+    },
+    {
+      "path": "https://voila.anzalabidi.dev/demo-poached.mp4",
+      "kind": "mp4",
+      "width": 1920,
+      "height": 1200,
+      "bytes": 6597080,
+      "shows": "65 second demo of a real product, scripted, narrated and self-reviewed by an agent"
+    },
+    {
+      "path": "https://voila.anzalabidi.dev/demo-launch.mp4",
+      "kind": "mp4",
+      "width": 1920,
+      "height": 1200,
+      "bytes": 5454735,
+      "shows": "61 second launch demo (hosted, returns 200, but not linked from the README or site page; bytes from the local copy)"
+    },
+    {
+      "path": "https://voila.anzalabidi.dev/og.png",
+      "kind": "png",
+      "width": 1200,
+      "height": 630,
+      "bytes": 40148,
+      "shows": "Open Graph card (bytes from the local copy; hosted Content-Length also 40148)"
+    },
+    {
+      "path": "/Users/anzalhussainabidi/personal/voila/docs/poster-launch.jpg",
+      "kind": "jpg",
+      "width": 1200,
+      "height": 750,
+      "bytes": 39223,
+      "shows": "poster for the launch demo"
+    }
+  ],
+  "notes": "voila/recordings/ ignored as instructed. Hosted URLs for demo-tour.mp4, poster-tour.jpg, demo-poached.mp4, demo-languages.mp4, poster-languages.jpg, og.png returned 200 with matching Content-Length; local copies are in /Users/anzalhussainabidi/personal/voila/docs/. All videos are 1920x1200 (16:10). Best hero: demo-tour.mp4 with poster-tour.jpg (it is the project demonstrating itself), or demo-languages.mp4 for a lighter 2.6MB asset. Inconsistency in the README: `voila voices` is described as '28 narration voices, graded' in the Run block while the Captions section and CHANGELOG say 41 usable voices; no voice-count metric was used for that reason. The 80MB metric is a size claim (README says ~80MB quantized) and the model text also says ~90MB for the voice model download in the Run section. The npm package is voila-recorder; the installed bin is voila. The repo has no git tags or GitHub releases; the version comes from package.json and npm view voila-recorder (0.8.0). The 80MB source line is a fragment of a README sentence that contains an em dash in the original, trimmed so this file stays dash free. The recipe embedded in the mp4 was confirmed with ffprobe on demo-tour.mp4."
+}

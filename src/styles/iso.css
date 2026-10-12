@@ -1,0 +1,12 @@
+/* Ryan's anatomy kit styles (MIT, vendor/anatomy), retuned to Halley's paper and ink. */
+@import "../../vendor/anatomy/kit/iso.css";
+
+.iso[data-theme="light"].fig {
+  --anatomy-page: var(--color-paper); --anatomy-card: var(--color-paper);
+  --anatomy-text: var(--color-t2); --anatomy-strong: var(--color-t1); --anatomy-muted: var(--color-t3);
+  --anatomy-paper: #fbfaf6; --anatomy-face: #fffefb; --anatomy-top: #fffefb;
+  --anatomy-shade-0: #dcd7cc; --anatomy-shade-1: #e5e0d6; --anatomy-shade-2: #edeae1; --anatomy-shade-3: #f4f1ea;
+  --anatomy-lit-top: #ffffff; --anatomy-lit-shade: #eeeae2;
+  --anatomy-hi: #1f1d1a; --anatomy-mid: #7a7368; --anatomy-weight: .7px; --anatomy-lo: #b5aea2; --anatomy-faint: #d6d0c5; --anatomy-lit: #0c0b0a;
+  --anatomy-halo: #857b6a; --anatomy-halo-opacity: .3; --anatomy-dot: #3a3631;
+}

@@ -1,0 +1,48 @@
+---
+import Icon from "./Icon.astro";
+interface Props { initial: string; name: string; role?: string; href?: string; open?: boolean; links?: { kind: "github" | "x" | "linkedin" | "globe"; href: string; label: string }[] }
+const { initial, name, role = "Collaborator", href, open = false, links = [] } = Astro.props;
+const id = `rim-${name.toLowerCase().replace(/[^a-z]+/g, "-")}`;
+const rim = open ? "Your name here · Build with us · Halley ·" : `${name} · ${role} · Halley · MMXXVI ·`;
+---
+<figure class:list={["seal", { open }]}>
+  <a class="disc" href={href} aria-label={open ? "Build with us" : name}>
+    <svg viewBox="0 0 200 200" aria-hidden="true">
+      <defs><path id={id} d="M100,100 m-79,0 a79,79 0 1,1 158,0 a79,79 0 1,1 -158,0" /></defs>
+      <circle class="outer" cx="100" cy="100" r="96" />
+      <circle class="inner" cx="100" cy="100" r="64" />
+      <g class="rim"><text><textPath href={`#${id}`} textLength="490" lengthAdjust="spacing">{rim}</textPath></text></g>
+      <text class="mono" x="100" y={open ? 120 : 127}>{open ? "+" : initial}</text>
+    </svg>
+  </a>
+  <figcaption>
+    <b>{open ? "You, maybe" : name}</b>
+    <span>{open ? "hello@halleylabs.dev" : role}</span>
+    {links.length > 0 && (
+      <span class="links">{links.map((l) => <a href={l.href} aria-label={`${name} on ${l.label}`}><Icon name={l.kind} size={15} /></a>)}</span>
+    )}
+  </figcaption>
+</figure>
+
+<style>
+  .seal { margin: 0; display: flex; flex-direction: column; align-items: center; text-align: center; }
+  .disc { display: block; width: 100%; max-width: 208px; border-radius: 50%; }
+  svg { width: 100%; height: auto; overflow: visible; }
+  .outer { fill: var(--color-paper); stroke: var(--color-t1); stroke-width: 1.4; transition: fill var(--t-mark) var(--ease); }
+  .inner { fill: none; stroke: var(--color-rule); stroke-width: 1; }
+  .rim { transform-origin: 100px 100px; transition: transform 2.6s var(--ease); }
+  .rim text { font: 500 10.2px var(--font-mono); letter-spacing: .22em; text-transform: uppercase; fill: var(--color-t2); }
+  .mono { font: 380 80px var(--font-serif); font-variation-settings: "opsz" 144, "SOFT" 70; text-anchor: middle; fill: var(--color-t1); }
+  .open .outer { stroke: var(--color-t3); stroke-dasharray: 2.5 5; }
+  .open .mono { font: 300 56px var(--font-sans); fill: var(--color-t3); }
+  figcaption { margin-top: 18px; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  b { font: 460 20px/1.2 var(--font-serif); font-variation-settings: "opsz" 72, "SOFT" 40; letter-spacing: -0.01em; }
+  figcaption > span { color: var(--color-t3); font-size: 14.5px; }
+  .links { display: flex; gap: 6px; margin-top: 6px; }
+  .links a { display: grid; place-items: center; width: 32px; height: 32px; margin: -4px; border-radius: 50%; color: var(--color-t3); transition: color var(--t-hover) var(--ease), background-color var(--t-hover) var(--ease); }
+  .links a:hover { color: var(--color-t1); background: var(--color-paper-2); }
+  @media (hover: hover) and (pointer: fine) {
+    .disc:hover .rim { transform: rotate(-42deg); }
+    .disc:hover .outer { fill: #fffdf8; }
+  }
+</style>

@@ -1,0 +1,37 @@
+{
+  "slug": "quicky-wiki",
+  "name": "Quicky Wiki",
+  "repo": "halleylabs/quicky-wiki",
+  "category": "Developer tools",
+  "language": "TypeScript",
+  "license": "MIT",
+  "version": "0.1.2",
+  "tagline": "Turn a pile of documents into a knowledge base that scores how sure it is",
+  "summary": "Quicky Wiki reads your papers, notes and web pages, extracts the individual claims, and gives each one a confidence score with its source. It surfaces contradictions as they appear, lets claims strengthen or decay over time, and shows the result in a local dashboard with a knowledge graph and a chat that answers with citations. The same knowledge can be compiled to Obsidian-style markdown, slides or flashcards, and agents can use it through a built-in MCP server.",
+  "metrics": [],
+  "features": [
+    "Every claim carries a confidence score, its provenance and the claims it depends on",
+    "Contradictions and knowledge gaps are surfaced automatically when a new source is ingested",
+    "Local dashboard with an interactive knowledge graph, claims, timeline, health view and Ask Wiki chat with citations",
+    "Compiles to Obsidian-compatible markdown, Marp slides, Anki flashcards, a D3 graph and a timeline",
+    "Built-in MCP server (stdio or HTTP) and an embeddable library export"
+  ],
+  "how_it_works": [
+    "A language model extracts atomic claims from each source document and assigns each a confidence score.",
+    "Claims and an event log of every change in belief (created, reinforced, challenged, weakened, superseded, resolved) are stored in a local SQLite graph, and confidence changes cascade to dependent claims.",
+    "The graph is compiled into wiki pages, slides, flashcards and visualizations, and served through the dashboard and the MCP server."
+  ],
+  "install": "npx quicky-wiki init --name \"My Research\"",
+  "quickstart": "npx quicky-wiki init --name \"My Research\"   # auto-detects your API keys\nqw ingest paper.pdf                          # extract claims from a paper\nqw ingest https://arxiv.org/abs/2401.12345   # or a URL\nqw serve                                     # open the dashboard",
+  "links": {
+    "github": "https://github.com/halleylabs/quicky-wiki",
+    "site": null,
+    "docs": null,
+    "npm": "https://www.npmjs.com/package/quicky-wiki",
+    "pypi": null,
+    "crates": null,
+    "demo": null
+  },
+  "media": [],
+  "notes": "No benchmarks, results files, CHANGELOG, docs folder, site or media assets exist in the repo (only README, package.json, src, LICENSE, CI workflow). The README contains no quantifiable impact numbers, so metrics is intentionally empty; the site builder should lead with the feature table (confidence scores, contradictions surfaced, temporal decay) rather than a number. The package also exposes the commands qw and create-quicky-wiki. Works with Gemini, OpenAI, Anthropic, Ollama or any OpenAI-compatible endpoint (not named in copy per the no-competitor rule). Categorised as Developer tools; Agent infrastructure is a defensible alternative because of the MCP server. Version 0.1.2 confirmed by npm view and GitHub release v0.1.2 (2026-04-14). Dashboard is served at http://localhost:3737 by qw serve. Needs a screenshot of the dashboard graph for a hero; none exists."
+}

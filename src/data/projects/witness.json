@@ -1,0 +1,102 @@
+{
+  "slug": "witness",
+  "name": "witness",
+  "repo": "halleylabs/witness",
+  "category": "Agent infrastructure",
+  "language": "Rust",
+  "license": "MIT",
+  "version": "0.3.0",
+  "tagline": "A recording cache for model APIs that cuts inference spend and resumes crashed runs",
+  "summary": "witness is a single-binary, API-compatible proxy that sits between your agents and a model API, and agents change only the base URL. Repeat deterministic calls are served from the record instead of re-paying inference, and a crashed run can be replayed with zero model calls. The same record is a tamper-evident, signed, Merkle-committed audit trail, so it is already running as evidence before anyone asks a question.",
+  "metrics": [
+    {
+      "value": "0.25 ms",
+      "label": "median added per call to record everything, about 0.01% of a model call",
+      "source": "README.md: Recording costs about a quarter of a millisecond at the median."
+    },
+    {
+      "value": "53k/sec",
+      "label": "recorded calls per second on one machine",
+      "source": "README.md: Throughput plateaus around **53k recorded calls/sec** on this machine"
+    },
+    {
+      "value": "541µs",
+      "label": "to serve a repeated call from the record, instead of 803 ms to pay for it again",
+      "source": "README.md: ![witness demo: 803ms cache miss, 541µs hit, 403 capability denial, Merkle commit, audit with agent attribution](assets/demo.gif)"
+    }
+  ],
+  "features": [
+    "Repeat deterministic calls are served from the record instead of re-paying inference",
+    "Whole runs replay from the record with zero upstream calls, so crashed runs resume",
+    "Hash-chained journal with Merkle commitments, inclusion proofs and anchoring to a public transparency log",
+    "Ed25519 signed identity and narrowing-only delegations enforced at the network boundary",
+    "Records MCP tool calls and shell commands by what they changed, in the same chain; fleet peer cache and Prometheus and OpenTelemetry export"
+  ],
+  "how_it_works": [
+    "Agents point their base URL at witness serve, which forwards to the model API and stores every request and response by BLAKE3 content hash.",
+    "Each call is appended to a hash-chained journal, so any edit, deletion or reorder breaks the chain and witness verify finds it.",
+    "Identical reusable requests are answered from the record, and witness replay serves a whole recorded run with no upstream calls."
+  ],
+  "install": "cargo build --release",
+  "quickstart": "witness serve --port 8787 --upstream https://api.anthropic.com --cache\n# then point your agents at http://127.0.0.1:8787 instead of api.anthropic.com",
+  "links": {
+    "github": "https://github.com/halleylabs/witness",
+    "site": null,
+    "docs": null,
+    "npm": null,
+    "pypi": null,
+    "crates": null,
+    "demo": null
+  },
+  "media": [
+    {
+      "path": "/Users/anzalhussainabidi/personal/halley/repos/witness/assets/demo.gif",
+      "kind": "gif",
+      "width": 1050,
+      "height": 620,
+      "bytes": 571197,
+      "shows": "Terminal demo: cache miss then 541µs hit, a capability denial, Merkle commit, and an audit with agent attribution"
+    },
+    {
+      "path": "/Users/anzalhussainabidi/personal/halley/repos/witness/assets/social-preview.png",
+      "kind": "png",
+      "width": 1280,
+      "height": 640,
+      "bytes": 55604,
+      "shows": "Social preview card"
+    },
+    {
+      "path": "/Users/anzalhussainabidi/personal/halley/repos/witness/assets/diagrams/01-architecture.svg",
+      "kind": "svg",
+      "width": 1000,
+      "height": 536,
+      "bytes": 11457,
+      "shows": "Architecture diagram (PNG at 2000x1072 also exists, 95413 bytes)"
+    },
+    {
+      "path": "/Users/anzalhussainabidi/personal/halley/repos/witness/assets/diagrams/02-sequence.svg",
+      "kind": "svg",
+      "width": 1000,
+      "height": 636,
+      "bytes": 9827,
+      "shows": "Request sequence diagram (PNG 2000x1272 also exists)"
+    },
+    {
+      "path": "/Users/anzalhussainabidi/personal/halley/repos/witness/assets/diagrams/03-hash-chain.svg",
+      "kind": "svg",
+      "width": 1000,
+      "height": 452,
+      "bytes": 7369,
+      "shows": "Hash-chained journal diagram (PNG 2000x904 also exists)"
+    },
+    {
+      "path": "/Users/anzalhussainabidi/personal/halley/repos/witness/assets/diagrams/04-delegation.svg",
+      "kind": "svg",
+      "width": 1000,
+      "height": 480,
+      "bytes": 5941,
+      "shows": "Delegation chain diagram (PNG 2000x960 also exists)"
+    }
+  ],
+  "notes": "Best hero: assets/demo.gif (1050x620). The 803 ms vs 541µs figures come from the demo run against the built-in mock upstream, which simulates 800 ms of model latency (demo.sh: mock --latency-ms 800); real savings equal the full upstream call skipped. The 0.25 ms and 53k/sec figures come from bench/bench.sh against a zero-latency mock on an M-series MacBook (median of 3 runs, n=2000, c=20). Version 0.3.0 is from the GitHub release tag; Cargo.toml still says 0.1.0. The crates.io crate named 'witness' belongs to someone else, so do not link crates. Release assets are prebuilt tarballs (linux arm64/x86_64, macos arm64/x86_64) with no demo video. The README names several overlapping projects in a prior-art table; the site copy avoids naming them. No cost-saving percentage is published in the README, so none is claimed."
+}

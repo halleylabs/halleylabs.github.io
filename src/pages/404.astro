@@ -1,0 +1,25 @@
+---
+import Base from "../layouts/Base.astro";
+import Button from "../components/Button.astro";
+---
+<Base title="Not found | Halley" description="This page is not where we predicted." night>
+  <section class="nf on-night" data-tone="night">
+    <div class="frame">
+      <p class="t-data code">404</p>
+      <h1 class="t-h1">This page is somewhere past the orbit.</h1>
+      <p class="t-lede">We predicted it would be here, and for once we were wrong. Everything we make is on the open-source page.</p>
+      <div class="acts"><Button href="/" variant="light">Back home</Button><Button href="/work/" variant="ghost-dark" icon="none">Open source</Button></div>
+    </div>
+    <span class="streak" aria-hidden="true"></span>
+  </section>
+</Base>
+
+<style>
+  .nf { position: relative; min-height: 100svh; display: flex; align-items: center; overflow: hidden; }
+  .code { color: var(--color-d3); margin-bottom: 26px; }
+  h1 { color: var(--color-d1); }
+  .t-lede { color: var(--color-d2); margin-top: 22px; }
+  .acts { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 34px; }
+  .streak { position: absolute; top: 24%; left: -20%; width: 18%; height: 1px; background: linear-gradient(90deg, transparent, rgba(200,55,31,.6) 70%, #ffe8da); filter: drop-shadow(0 0 6px rgba(255,140,100,.8)); transform: rotate(-9deg); animation: miss 9s var(--ease) infinite; }
+  @keyframes miss { 0% { transform: translateX(0) rotate(-9deg); opacity: 0; } 5% { opacity: 1; } 40% { transform: translateX(700%) rotate(-9deg); opacity: 0; } 100% { opacity: 0; } }
+</style>

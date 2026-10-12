@@ -1,0 +1,53 @@
+{
+  "slug": "context-broker",
+  "name": "context-broker",
+  "repo": "halleylabs/context-broker",
+  "category": "Developer tools",
+  "language": "C++",
+  "license": "MIT",
+  "version": null,
+  "tagline": "Answers big-file reads with an exact skeleton: 80 to 95% fewer tokens, no second model",
+  "summary": "context-broker is a Claude Code hook that intercepts reads of large files and answers with the file's exact structure instead: imports, signatures and types as verbatim lines with real line numbers. It takes about a millisecond, runs entirely on your machine and sends nothing to another model. The agent then reads only the slices it needs by line range, so reading and editing a big file costs a fraction of a full read.",
+  "metrics": [
+    {
+      "value": "89%",
+      "label": "fewer tokens on big-file reads in a 506k-line monorepo, scanned in 296 ms",
+      "source": "README.md: 409 files over 350 lines · 3,832,475 → 455,840 tokens (89% saved) · scanned in 296ms"
+    },
+    {
+      "value": "~1 ms",
+      "label": "to outline an 800-line file, with no second model in the loop",
+      "source": "README.md: - skeletonize an 800-line file: **~1 ms**"
+    },
+    {
+      "value": "91 tokens",
+      "label": "to read a 102,448-token file as an exact outline",
+      "source": "README.md: | `ruff.cyclonedx.json` (SBOM) | 102,448 tok | 91 tok | 100% |"
+    }
+  ],
+  "features": [
+    "Verbatim source lines with real line numbers, so a skeleton can be incomplete but never wrong",
+    "Ranged reads always pass through, so the read-then-edit path needs no second full read",
+    "Fails open on any error, so the hook can never break a read",
+    "cb bench measures savings across your repo before you install, with no model calls",
+    "Also a CLI: skeleton, ranged read, log folding for noisy build output, and a running savings ledger"
+  ],
+  "how_it_works": [
+    "A PreToolUse hook catches Read calls on files over 350 lines; small files, binaries, images and ranged reads pass straight through.",
+    "The denial carries the answer: the file's skeleton, extracted by hand-rolled structural matchers for TypeScript, Python, Go, Rust, Java and more.",
+    "The agent expands only the bodies it needs with ranged reads, which are never intercepted."
+  ],
+  "install": "/plugin marketplace add halleylabs/context-broker",
+  "quickstart": "/plugin marketplace add halleylabs/context-broker\n/plugin install context-broker@context-broker",
+  "links": {
+    "github": "https://github.com/halleylabs/context-broker",
+    "site": null,
+    "docs": null,
+    "npm": null,
+    "pypi": null,
+    "crates": null,
+    "demo": null
+  },
+  "media": [],
+  "notes": "No image or video assets in the repo. Suggested hero: render the README skeleton sample (numbered lines with 'a few lines elided' markers) and the benchmark table as a styled code block. Re-verified locally: ./test.sh prints 'all tests passed', and 'cb bench ../unclaude/src' printed '20 files over 350 lines · 124184 → 17660 tokens (86% saved) · scanned in 8.8ms' (usable as an extra data point if the builder wants a fresh run). No npm/PyPI package, no git tags or releases; .claude-plugin/plugin.json declares 0.1.0, so version is null (installed from main via the plugin marketplace). The 89% and per-file figures come from one production monorepo run quoted in the README (token counts use a chars/4 estimate, per the README). The README table that names another vendor's tool was deliberately not used. The README text contains en and em dashes; the quotes above were chosen to avoid them."
+}

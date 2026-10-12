@@ -1,0 +1,21 @@
+---
+import Icon from "./Icon.astro";
+interface Props { title: string; label?: string; more?: { href: string; text: string } }
+const { title, label, more } = Astro.props;
+---
+<div class="sh reveal">
+  <div>
+    {label && <p class="t-label lab">{label}</p>}
+    <h2 class="t-h2">{title}</h2>
+  </div>
+  {more && <a class="more" href={more.href}>{more.text}<Icon name="arrow-right" size={16} /></a>}
+</div>
+
+<style>
+  .sh { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin-bottom: var(--head-gap); }
+  .lab { color: var(--color-t3); margin-bottom: 18px; }
+  .more { display: inline-flex; align-items: center; gap: 10px; font-weight: 540; font-size: 15px; padding-bottom: 6px; background: linear-gradient(currentColor, currentColor) 0 100% / 100% 1px no-repeat; transition: background-size var(--t-mark) var(--ease); white-space: nowrap; }
+  .more :global(.ico) { transition: transform var(--t-mark) var(--ease); }
+  @media (hover: hover) and (pointer: fine) { .more:hover :global(.ico) { transform: translateX(3px); } .more:hover { background-size: 0% 1px; background-position: 100% 100%; } }
+  @media (max-width: 640px) { .sh { flex-direction: column; align-items: flex-start; } }
+</style>

@@ -1,0 +1,47 @@
+{
+  "faultline": {
+    "hero": {
+      "type": "video",
+      "src": "/assets/media/faultline/demo.mp4",
+      "poster": "/assets/media/faultline/poster.jpg",
+      "w": 1280,
+      "h": 720
+    }
+  },
+  "tring": {
+    "hero": {
+      "type": "video",
+      "src": "/assets/media/tring/demo.mp4",
+      "poster": "/assets/media/tring/poster.jpg",
+      "w": 1280,
+      "h": 800
+    }
+  },
+  "voila": {
+    "hero": {
+      "type": "video",
+      "src": "/assets/media/voila/demo.mp4",
+      "poster": "/assets/media/voila/poster.jpg",
+      "w": 1280,
+      "h": 800
+    }
+  },
+  "witness": {
+    "hero": {
+      "type": "video",
+      "src": "/assets/media/witness/demo.mp4",
+      "poster": "/assets/media/witness/poster.jpg",
+      "w": 1050,
+      "h": 620
+    }
+  },
+  "samemark": {
+    "hero": {
+      "type": "video",
+      "src": "/assets/media/samemark/demo.mp4",
+      "poster": "/assets/media/samemark/poster.jpg",
+      "w": 880,
+      "h": 680
+    }
+  }
+}

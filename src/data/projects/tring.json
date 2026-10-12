@@ -1,0 +1,73 @@
+{
+  "slug": "tring",
+  "name": "Tring",
+  "repo": "halleylabs/tring",
+  "category": "Voice",
+  "language": "Python",
+  "license": "MIT",
+  "version": "0.4.1",
+  "tagline": "Write a voice agent once in YAML and run it on any speech architecture",
+  "summary": "Tring is an open-source voice agent stack built from lessons learned across more than a million production telephony calls. One YAML agent contract runs on cascade, speech-to-speech or hybrid runtimes with the same tools, analytics and cost attribution, so changing architecture is a config change. The default pipeline runs entirely on local open models, and four latency primitives make dead air during tool calls structurally impossible.",
+  "metrics": [
+    {
+      "value": "$0",
+      "label": "per-minute cost on the default local pipeline",
+      "source": "README.md: Zero cloud dependencies, zero per-minute cost."
+    },
+    {
+      "value": "3 runtimes",
+      "label": "from one YAML spec: cascade, speech-to-speech or hybrid, switched by config",
+      "source": "README.md: Define a voice agent once, in plain YAML, and run it on any of three architectures without rewriting anything"
+    }
+  ],
+  "features": [
+    "One agent contract runs on cascade (STT, LLM, TTS), speech-to-speech or hybrid runtimes",
+    "Tool calls must declare what the caller hears while they run, so there is no dead air",
+    "Playback ledger tracks heard versus unheard text, so the model never cites words a caller interrupted",
+    "Per-language routing of STT, TTS and LLM for callers who code-switch",
+    "Cost meter with exact versus estimated flags and a cost-per-outcome report; Studio for building, testing and replaying calls in the browser"
+  ],
+  "how_it_works": [
+    "An AgentSpec in YAML declares the persona, tools, language policy and runtime routing, and a RuntimeAdapter runs it on the chosen architecture.",
+    "The model answers in a speak-then-tool-call envelope, and a character-level parser streams the speech to TTS while the tool call is still being generated.",
+    "Every runtime emits the same SessionEvent stream, so cost metering, analytics and transports subscribe to it without knowing which runtime is underneath."
+  ],
+  "install": "pip install tring",
+  "quickstart": "pip install \"tring[transports]\"\ntring studio\n# opens at http://localhost:8900",
+  "links": {
+    "github": "https://github.com/halleylabs/tring",
+    "site": null,
+    "docs": "https://github.com/halleylabs/tring/tree/main/docs",
+    "npm": null,
+    "pypi": "https://pypi.org/project/tring/",
+    "crates": null,
+    "demo": null
+  },
+  "media": [
+    {
+      "path": "https://github.com/halleylabs/tring/releases/download/v0.4.0/tring-demo.mp4",
+      "kind": "mp4",
+      "width": 1920,
+      "height": 1200,
+      "bytes": 8074944,
+      "shows": "106 second narrated demo of Tring Studio: a live agent booking an appointment through a choreographed tool call, the flow builder, and session replay (release asset, v0.4.0)"
+    },
+    {
+      "path": "/Users/anzalhussainabidi/personal/halley/repos/tring/docs/assets/tring-demo.gif",
+      "kind": "gif",
+      "width": 720,
+      "height": 450,
+      "bytes": 3189566,
+      "shows": "Looping preview of the same Studio demo, used as the README hero"
+    },
+    {
+      "path": "/Users/anzalhussainabidi/personal/halley/repos/tring/docs/assets/social-card.png",
+      "kind": "png",
+      "width": 1280,
+      "height": 640,
+      "bytes": 139449,
+      "shows": "Social card"
+    }
+  ],
+  "notes": "Best hero: the mp4 release asset (1920x1200, narrated, 106s) or the local 720x450 gif for a lightweight loop. PyPI version 0.4.1 confirmed via pypi.org JSON; GitHub latest release v0.4.1 (the demo mp4 is attached to v0.4.0 only). The README contains no benchmark latency or cost-saving numbers, so metrics are track record and zero-cost facts; no latency figure was invented. docs/launch-posts.md says 'hundreds of thousands' of calls while the README says 'more than a million'; I used the README figure, owner should confirm. Install command in the README is pip install tring; tring studio needs the transports extra. Not verified: the README diagram annotation '~0ms to first audio' is a diagram label, not a measurement, so it is not used."
+}

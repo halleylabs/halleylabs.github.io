@@ -1,0 +1,66 @@
+---
+import Base from "../layouts/Base.astro";
+import Button from "../components/Button.astro";
+import Seal from "../components/Seal.astro";
+import sealRaw from "../assets/seal.svg?raw";
+const seal = sealRaw.replace('class="seal-svg seal-light"', 'class="plate-seal"');
+const rules = [
+  { t: "Open by default", d: "Most of what we make is open source under permissive licences, so you can read it, run it and build on it." },
+  { t: "Measured, then claimed", d: "Every number on our project pages links to the benchmark or document it comes from. We would rather say less and have all of it be true." },
+  { t: "One job, done well", d: "Each project solves one problem and works on its own. Together they add up to a stack, and the best of them become flagships." },
+  { t: "No ranks", d: "Everyone at Halley is a collaborator. Every project carries the names of the people who made it." },
+];
+---
+<Base title="About | Halley" description="Halley is an independent AI lab and a home for the people who build with us. Named for the first comet anyone predicted.">
+  <section class="hero"><div class="frame grid-12">
+    <div class="h"><p class="t-label lab reveal">About</p><h1 class="t-h1 reveal" data-delay="1">A home for the people who build with us.</h1></div>
+    <p class="t-lede lede reveal" data-delay="2">Halley is an independent AI lab. It is where we keep our flagships, share the open source behind them, and put our names on the work.</p>
+  </div></section>
+
+  <section class="section story"><div class="frame grid-12">
+    <div class="art reveal" set:html={seal} />
+    <div class="txt">
+      <p class="t-label lab reveal">The name</p>
+      <h2 class="t-h2 reveal">Named for a prediction that came true.</h2>
+      <p class="reveal">In 1705 Edmond Halley used Newton's laws to predict that a comet would return in 1758. He died sixteen years before it did. It came back on schedule, the first time anyone had predicted the return of a comet.</p>
+      <p class="reveal">That is how we want to work. Reason it through from first principles, build it, and let the work prove itself.</p>
+    </div>
+  </div></section>
+
+  <section class="section rules" style="padding-top:0"><div class="frame">
+    <p class="t-label lab reveal">How we work</p>
+    <ol class="rl">{rules.map((r, i) => <li class="reveal" data-delay={String(i % 2)}><span class="t-data">{String(i + 1).padStart(2, "0")}</span><h3 class="t-h3">{r.t}</h3><p>{r.d}</p></li>)}</ol>
+  </div></section>
+
+  <section class="section people" id="people" style="padding-top:0"><div class="frame grid-12">
+    <div class="pc reveal"><p class="t-label lab">The people</p><h2 class="t-h2">Friends who build together, with room for more.</h2><p class="pl">If you want to build a flagship or keep an open-source project alive with us, write to us. Tell us what you want to build.</p><Button href="mailto:hello@halleylabs.dev?subject=Build%20with%20Halley">Build with us</Button></div>
+    <div class="seals">
+      <div class="reveal"><Seal initial="A" name="Anzal Husain Abidi" href="https://anzalabidi.dev" links={[{ kind: "github", href: "https://github.com/anzal1", label: "GitHub" }, { kind: "linkedin", href: "https://www.linkedin.com/in/anzal-husain-abidi-740a40204", label: "LinkedIn" }, { kind: "x", href: "https://x.com/AnzalAbidi", label: "X" }]} /></div>
+      <div class="reveal" data-delay="1"><Seal initial="F" name="Faiz Ullah" href="https://faiz-ai.dev" links={[{ kind: "github", href: "https://github.com/Faizullah9181", label: "GitHub" }, { kind: "globe", href: "https://faiz-ai.dev", label: "website" }, { kind: "x", href: "https://x.com/dot_ragnar", label: "X" }]} /></div>
+      <div class="reveal" data-delay="2"><Seal initial="+" name="You" open href="mailto:hello@halleylabs.dev?subject=Build%20with%20Halley" /></div>
+    </div>
+  </div></section>
+</Base>
+
+<style>
+  .hero { padding: clamp(150px, 16vw, 210px) 0 clamp(40px, 5vw, 64px); }
+  .h { grid-column: 1 / span 8; }
+  .lede { grid-column: 9 / span 4; align-self: end; color: var(--color-t2); }
+  .lab { color: var(--color-t3); margin-bottom: 22px; }
+  .story .art { grid-column: 1 / span 5; }
+  .story .art :global(svg) { width: 100%; max-width: 440px; height: auto; margin-inline: auto; }
+  .txt { grid-column: 7 / span 6; align-self: center; }
+  .txt .t-h2 { margin-bottom: 26px; }
+  .txt p:not(.lab) { color: var(--color-t2); font-size: clamp(17px, 1.3vw, 19px); margin-bottom: 18px; }
+  .rl { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0 var(--col-gap); border-top: 1px solid var(--color-rule); }
+  .rl li { padding-top: 24px; }
+  .rl .t-data { color: var(--color-t3); }
+  .rl h3 { margin: 34px 0 12px; }
+  .rl p { color: var(--color-t2); font-size: 16px; }
+  .pc { grid-column: 1 / span 4; }
+  .pc .t-h2 { margin-bottom: 20px; }
+  .pl { color: var(--color-t2); margin-bottom: 30px; }
+  .seals { grid-column: 6 / span 7; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--col-gap); }
+  @media (max-width: 980px) { .h, .lede, .story .art, .txt, .pc, .seals { grid-column: 1 / -1; } .lede, .txt, .seals { margin-top: 32px; } .rl { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px var(--col-gap); } }
+  @media (max-width: 560px) { .rl { grid-template-columns: 1fr; } }
+</style>

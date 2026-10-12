@@ -1,0 +1,53 @@
+---
+import Mark from "./Mark.astro";
+import Icon from "./Icon.astro";
+const cols = [
+  { h: "Flagship", links: [["The operating system", "/os/"], ["Early access", "mailto:hello@halleylabs.dev?subject=Early%20access"]] },
+  { h: "Open source", links: [["All projects", "/work/"], ["Releases", "https://github.com/halleylabs"], ["Discussions", "https://github.com/orgs/halleylabs/discussions"]] },
+  { h: "Lab", links: [["About", "/about/"], ["People", "/about/#people"], ["hello@halleylabs.dev", "mailto:hello@halleylabs.dev"]] },
+];
+---
+<footer class="ft on-night" data-tone="night">
+  <div class="sky" aria-hidden="true"><span class="streak"></span></div>
+  <div class="frame">
+    <p class="ret">The comet comes back on 28 July 2061.</p>
+    <p class="t-data cnt" data-countdown>We will still be building.</p>
+    <div class="cols">
+      <div class="brand"><a href="/" aria-label="Halley, home"><Mark size={26} /><span>halley</span></a><p>An independent AI lab. A home for the people who build with us, our flagships, and the open source behind them.</p></div>
+      {cols.map((c) => (
+        <div><h4 class="t-label">{c.h}</h4>{c.links.map(([t, h]) => <a href={h}>{t}</a>)}</div>
+      ))}
+    </div>
+    <div class="base t-data">
+      <span>© {new Date().getFullYear()} Halley</span>
+      <span class="soc"><a href="https://github.com/halleylabs" aria-label="GitHub"><Icon name="github" size={17} /></a></span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const el = document.querySelector<HTMLElement>("[data-countdown]");
+  if (el) {
+    const days = Math.ceil((Date.UTC(2061, 6, 28) - Date.now()) / 86400000);
+    el.textContent = `${days.toLocaleString("en-US")} days from today. We will still be building.`;
+  }
+</script>
+
+<style>
+  .ft { position: relative; overflow: hidden; padding: clamp(96px, 10vw, 140px) 0 28px; }
+  .sky { position: absolute; inset: 0; pointer-events: none; }
+  .streak { position: absolute; top: 22%; left: -24%; width: 22%; height: 1px; background: linear-gradient(90deg, transparent, rgba(200,55,31,.55) 70%, #ffe8da); filter: drop-shadow(0 0 6px rgba(255,140,100,.7)); transform: rotate(-7deg); animation: pass 16s linear infinite; }
+  @keyframes pass { 0% { transform: translateX(0) rotate(-7deg); opacity: 0; } 3% { opacity: 1; } 20% { transform: translateX(640%) rotate(-7deg); opacity: 0; } 100% { transform: translateX(640%) rotate(-7deg); opacity: 0; } }
+  .ret { position: relative; font: 400 clamp(32px, 3.8vw, 56px)/1.06 var(--font-serif); font-variation-settings: "opsz" 144, "SOFT" 70; letter-spacing: -0.022em; color: var(--color-d1); }
+  .cnt { margin-top: 14px; color: var(--color-d3); }
+  .cols { position: relative; display: grid; grid-template-columns: 5fr repeat(3, 2.4fr); gap: 40px var(--col-gap); margin-top: clamp(72px, 8vw, 112px); padding-top: 36px; border-top: 1px solid var(--dline); }
+  .brand a { display: inline-flex; align-items: center; gap: 10px; color: var(--color-d1); font: 480 25px/1 var(--font-serif); font-variation-settings: "opsz" 72, "SOFT" 0; letter-spacing: -0.02em; }
+  .brand p { margin-top: 16px; color: var(--color-d2); font-size: 15px; }
+  h4 { color: var(--color-d3); margin-bottom: 18px; }
+  .cols a:not(.brand a) { display: block; padding: 5px 0; color: var(--color-d2); font-size: 15px; transition: color var(--t-hover) var(--ease); }
+  .cols a:hover { color: var(--color-d1); }
+  .base { position: relative; display: flex; justify-content: space-between; align-items: center; margin-top: 56px; padding-top: 20px; border-top: 1px solid var(--dline); color: var(--color-d3); }
+  .soc a { display: grid; place-items: center; width: 36px; height: 36px; margin: -8px; border-radius: 50%; color: var(--color-d3); transition: color var(--t-hover) var(--ease); }
+  .soc a:hover { color: var(--color-d1); }
+  @media (max-width: 820px) { .cols { grid-template-columns: 1fr 1fr; } .brand { grid-column: 1 / -1; } }
+</style>

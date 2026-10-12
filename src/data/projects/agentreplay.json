@@ -1,0 +1,43 @@
+{
+  "slug": "agentreplay",
+  "name": "AgentReplay",
+  "repo": "halleylabs/agentreplay",
+  "category": "Agent infrastructure",
+  "language": "JavaScript",
+  "license": "Apache-2.0",
+  "version": "0.2.0-alpha.2",
+  "tagline": "Turn a failed agent run into a replayable test that blocks the same mistake in CI",
+  "summary": "AgentReplay freezes a production agent run as plain JSON: tool calls, arguments, state before and after, approvals and side effects. You replay it, diff it against a fix, and gate every future model, prompt or tool change on the same failure. Gates are deterministic assertions, so a regression test never depends on a judge model.",
+  "metrics": [
+    {
+      "value": "20 of 20",
+      "label": "vulnerable agent runs caught by the gates, and 20 of 20 hardened runs passed",
+      "source": "README.md: CRM adversarial pilot: 20/20 vulnerable runs caught, 20/20 hardened runs passed, 20/20 vulnerable-to-fixed diffs detected."
+    }
+  ],
+  "features": [
+    "Records tool calls, arguments, responses, pre and post state snapshots, approvals and side-effect diffs as agentreplay.trace.v1 JSON",
+    "Deterministic gates such as tool_not_called, requires_approval, tool_order, arg_matches and side_effect_count",
+    "Diffs a bad run against a fixed run: changed tool order, arguments and side effects",
+    "Node reference SDK plus Python and Go SDKs that emit matching trace hashes, and raw JSON for any other language",
+    "Redacts secrets and PII, and scaffolds a CI workflow with agentreplay init"
+  ],
+  "how_it_works": [
+    "Wrap each tool with the harness so every call is recorded with its state before and after, and the side-effect diff.",
+    "Save the run as a trace, add assertions such as never sending an email without approval, and replay it against recorded tool responses.",
+    "Run agentreplay gate in CI with --json; a changed model, prompt or tool that brings the failure back fails the build."
+  ],
+  "install": "npm install @anzalabidi/agentreplay",
+  "quickstart": "node ./bin/agentreplay.js demo\nnode ./bin/agentreplay.js gate ./traces/billing-bad-run.json\nnode ./bin/agentreplay.js gate ./traces/billing-fixed-run.json\nnode ./bin/agentreplay.js diff ./traces/billing-bad-run.json ./traces/billing-fixed-run.json",
+  "links": {
+    "github": "https://github.com/halleylabs/agentreplay",
+    "site": "https://halleylabs.dev/agentreplay-site/",
+    "docs": "https://github.com/halleylabs/agentreplay/blob/main/docs/TRACE_SPEC.md",
+    "npm": "https://www.npmjs.com/package/@anzalabidi/agentreplay",
+    "pypi": null,
+    "crates": null,
+    "demo": null
+  },
+  "media": [],
+  "notes": "No gif/mp4/png/jpg assets exist in the agentreplay or agentreplay-site repos (only favicon.svg in the site, and public/ holds the local console html/js). Suggested hero: a screenshot or embed of the live site https://halleylabs.dev/agentreplay-site/ (HTTP 200 confirmed), or render the CLI gate output as a terminal block (bad run FAILED 3/6, fixed run PASSED 6/6; output reproduced locally). The 20/20 pilot figure is from an offline public CRM fixture and was re-run locally (node examples/crm-agent-workflow/pilot.js: cases 20, caught 20, missed 0, fixedClean 20, diffsChanged 20). Version: npm latest is 0.2.0-alpha.2 (confirmed with npm view); the only git tag and GitHub release is v0.2.0-alpha.1 (pre-release). License is Apache-2.0 per LICENSE and package.json, though the GitHub API reports NOASSERTION. README also mentions Witness (halleylabs/witness) as a deployed implementation of the trace ideas. README states the project is an installable alpha, so avoid calling it production-ready."
+}

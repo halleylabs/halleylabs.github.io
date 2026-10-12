@@ -1,0 +1,142 @@
+{
+  "slug": "faultline",
+  "name": "faultline",
+  "repo": "halleylabs/faultline",
+  "category": "Agent infrastructure",
+  "language": "TypeScript",
+  "license": "MIT",
+  "version": "0.5.1",
+  "tagline": "A live architecture map that stops agents crossing the boundaries you drew",
+  "summary": "You declare the systems of a codebase once, and every change after that, by you or by a coding agent, shows up on a map that never moves, as a sentence in the pull request, and as a short answer the agent reads before it writes the wrong import. It reads imports in more than a dozen language families and only enforces rules on edges that the language's own rules prove. Agents get four small tools, so the whole architecture of a large repo costs about a thousand tokens instead of a full read of the source.",
+  "metrics": [
+    {
+      "value": "0 of 6",
+      "label": "forbidden imports shipped by agents using faultline, against 3 of 6 without it",
+      "source": "README.md: Where a rule covered the tempting import, agents crossed it **3 of 6** times with no guidance, **5 of 6** times with the rule written in AGENTS.md, and **0 of 6** times with faultline, at 46 to 62% higher average cost per run (the correct fix is a refactor)."
+    },
+    {
+      "value": "1,225 tokens",
+      "label": "to give an agent the whole architecture of a 967-file repo, instead of about 935,000 to read it",
+      "source": "README.md: | The whole architecture | 1,225 | 11,838 just to list the paths; ~935,000 to read the files and see the imports |"
+    },
+    {
+      "value": "100%",
+      "label": "precision on five real Python and Rust codebases, checked against each language's own toolchain",
+      "source": "README.md: | pallets/flask | Python `ast` + `PathFinder` | 100% | 100% | (same 100% precision rows for psf/requests, encode/httpx, BurntSushi/ripgrep, tokio-rs/axum)"
+    }
+  ],
+  "features": [
+    "Live map of systems that redraws as files change, with new edges green and crossed fault lines red",
+    "Four MCP tools with descriptions under 40 words each, so agents pay about 445 tokens per session for the tool list",
+    "Pre-commit hook and GitHub Action that fail a change crossing a fault line or loosening faultline.yml",
+    "Footprint view that shows what an entry point loads at startup and the files to cut to shrink it",
+    "Reads TypeScript, Python, Go, Rust, the JVM languages, C#, C and C++, Ruby, PHP, Swift, Dart and more"
+  ],
+  "how_it_works": [
+    "A snapshot comes from a git ref, the staged index or the working tree, and each file is parsed by its language's extractor with results cached by git blob hash.",
+    "Each import is resolved by that language's own rules and tagged exact or inferred; each file is assigned to the most specific system in faultline.yml.",
+    "File edges roll up into module and system edges, two snapshots are diffed, and the result is drawn on the map, written into the PR comment and returned to agents with its token cost."
+  ],
+  "install": "npx -y @anzalabidi/faultline init",
+  "quickstart": "fault init        # propose systems from the repo, write faultline.yml\nfault map         # open the live map; it redraws as files change\nfault setup       # connect your agents: MCP, hooks, AGENTS.md, pre-commit\nfault check main  # exit 1 if it crosses a fault line or loosens a rule (CI)",
+  "links": {
+    "github": "https://github.com/halleylabs/faultline",
+    "site": "https://faultline.anzalabidi.dev",
+    "docs": null,
+    "npm": "https://www.npmjs.com/package/@anzalabidi/faultline",
+    "pypi": null,
+    "crates": null,
+    "demo": null
+  },
+  "media": [
+    {
+      "path": "https://faultline.anzalabidi.dev/media/crack-6s.mp4",
+      "kind": "mp4",
+      "width": 1280,
+      "height": 720,
+      "bytes": 881190,
+      "shows": "6 second loop of an agent's import crossing a declared line and faultline stopping it (best hero; poster is https://faultline.anzalabidi.dev/media/crack-6s.jpg, 1280x720, 49559 bytes)"
+    },
+    {
+      "path": "https://faultline.anzalabidi.dev/media/crack-6s.jpg",
+      "kind": "jpg",
+      "width": 1280,
+      "height": 720,
+      "bytes": 49559,
+      "shows": "poster frame for the 6 second crossing loop"
+    },
+    {
+      "path": "https://faultline.anzalabidi.dev/media/live-loop.mp4",
+      "kind": "mp4",
+      "width": 820,
+      "height": 520,
+      "bytes": 387127,
+      "shows": "14 second live loop of the map redrawing on withastro/astro as real files change"
+    },
+    {
+      "path": "https://faultline.anzalabidi.dev/media/faultline.mp4",
+      "kind": "mp4",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 9008126,
+      "shows": "37 second 3D film: an agent crosses a line, is stopped and reroutes"
+    },
+    {
+      "path": "https://faultline.anzalabidi.dev/media/poster.jpg",
+      "kind": "jpg",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 111241,
+      "shows": "poster for the 37 second film"
+    },
+    {
+      "path": "https://faultline.anzalabidi.dev/media/og.jpg",
+      "kind": "jpg",
+      "width": 1200,
+      "height": 630,
+      "bytes": 57188,
+      "shows": "Open Graph card"
+    },
+    {
+      "path": "https://faultline.anzalabidi.dev/media/footprint.jpg",
+      "kind": "jpg",
+      "width": 1060,
+      "height": 840,
+      "bytes": 93963,
+      "shows": "footprint of Astro's production entry, with the import chain that loads zod drawn on the map"
+    },
+    {
+      "path": "/Users/anzalhussainabidi/personal/faultline/docs/demo.gif",
+      "kind": "gif",
+      "width": 960,
+      "height": 600,
+      "bytes": 6426309,
+      "shows": "README demo recorded live on withastro/astro: one edit crosses a fault line (edge turns red), one adds an allowed dependency (green), then drill-down into Request handling"
+    },
+    {
+      "path": "/Users/anzalhussainabidi/personal/faultline/docs/demo.mp4",
+      "kind": "mp4",
+      "width": 1440,
+      "height": 900,
+      "bytes": 2743456,
+      "shows": "36 second full-resolution version of the README demo"
+    },
+    {
+      "path": "/Users/anzalhussainabidi/personal/faultline/docs/footprint.mp4",
+      "kind": "mp4",
+      "width": 1440,
+      "height": 900,
+      "bytes": 3718756,
+      "shows": "44 second recording of what Astro's production entry loads at startup"
+    },
+    {
+      "path": "/Users/anzalhussainabidi/personal/faultline/demo/astro-faultline-demo.mp4",
+      "kind": "mp4",
+      "width": 1920,
+      "height": 1200,
+      "bytes": 3272592,
+      "shows": "27 second Astro demo recording (1920x1200)"
+    }
+  ],
+  "notes": "All https media URLs returned 200 from curl -sI (Content-Length used for bytes). Best hero: crack-6s.mp4 with crack-6s.jpg poster (small, loops, on the project's own site); live-loop.mp4 is the best 'real product' clip. The site also embeds a live Astro map at https://faultline.anzalabidi.dev/astro-map.html (iframe-able). The agent metric is a pilot (36 headless runs, one repo, one model, n=3 per cell; README says to read it as a pilot) and the README states faultline runs cost 46 to 62% more per run; that cost fact is deliberately not in the metrics, but do not present the 0 of 6 as more than a pilot. The 'precision 100%' metric is across the five repos named in the source row note; tokio and fastapi precision is also 100% (recall 72.7% and 97.8%). Build speed claim not used: README says 'Every repo named above builds its full graph in under a second on a laptop, cold, with no cache.' GitHub reports the repo language as HTML because of the site folder; the source is TypeScript. npm version 0.5.1 confirmed, GitHub release v0.5.1 latest (2026-09-27)."
+}

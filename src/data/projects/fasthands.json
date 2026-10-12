@@ -1,0 +1,110 @@
+{
+  "slug": "fasthands",
+  "name": "fasthands",
+  "repo": "halleylabs/fasthands",
+  "category": "Agents",
+  "language": "TypeScript",
+  "license": "MIT",
+  "version": null,
+  "tagline": "Computer use that sends diffs, not screenshots: 91% fewer tokens, any model as the brain",
+  "summary": "fasthands is an open-source computer-use engine that observes a page once and then sends only what changed. Every click is hash-checked at the moment it fires, so a page that shifts under the agent aborts the batch instead of hitting the wrong button. It runs with Claude, GPT, or a small model on your own laptop.",
+  "metrics": [
+    {
+      "value": "91.3%",
+      "label": "fewer observation tokens than a screenshot-every-turn loop, over 120 verified runs",
+      "source": "README.md: 91.3% fewer tokens and 39.5% fewer turns than the screenshot loop"
+    },
+    {
+      "value": "0 of 20",
+      "label": "wrong-button clicks when the page shifts mid-action, against 20 of 20 without the guard",
+      "source": "README.md: | fasthands guarded batch | 20 | **0 · 0%** | 20 | **20 · 100%** | and | unguarded batch (fires on stale refs) | 20 | **20 · 100%** | 0 | 0 |"
+    },
+    {
+      "value": "39 tokens",
+      "label": "to observe a change on a 2,000-element page, instead of 92,732 to resend the whole tree",
+      "source": "README.md: | 2,000 | 141,910 | 1,366 | 92,732 | **39** |"
+    }
+  ],
+  "features": [
+    "Observes the page as a compact tree once, then sends diffs with stable element refs",
+    "Guarded action batches: every ref is re-hashed before it fires and the batch aborts on drift",
+    "xray reads the HTML contract (required, pattern, min/max) and blocks a submit the browser says will fail",
+    "Reads canvas draw commands and WebGL scene graphs, and draws with guarded pointer strokes",
+    "Works with Anthropic, OpenAI or any OpenAI-compatible endpoint such as Ollama, with no SDK dependencies"
+  ],
+  "how_it_works": [
+    "The engine takes one compact tree of the interactive page, gives each element a stable ref and content hash, and afterwards sends only diffs.",
+    "The model returns a JSON batch of actions; the executor re-hashes every ref before firing and aborts with a drift note if the page changed.",
+    "xray adds the page's own validation rules to the observation, so the agent fixes forms before submitting instead of after a failed submit."
+  ],
+  "install": "git clone https://github.com/halleylabs/fasthands && cd fasthands && npm install && npx playwright install chromium",
+  "quickstart": "npm run bench -- --repeat 5                               # keyless 120-run headline\nnode --experimental-strip-types src/bench/drift-test.ts   # 0% vs 100%\nnode --experimental-strip-types src/bench/scale-test.ts   # scaling curves\nnode --experimental-strip-types demos/paintbrush.ts <image-url>   # paint anything",
+  "links": {
+    "github": "https://github.com/halleylabs/fasthands",
+    "site": null,
+    "docs": "https://github.com/halleylabs/fasthands/blob/main/docs/rasterization.md",
+    "npm": null,
+    "pypi": null,
+    "crates": null,
+    "demo": null
+  },
+  "media": [
+    {
+      "path": "/Users/anzalhussainabidi/personal/halley/repos/fasthands/demos/out-starrynight-v2.png",
+      "kind": "png",
+      "width": 602,
+      "height": 402,
+      "bytes": 364597,
+      "shows": "Starry Night painted through guarded pointer strokes with the app's own palette, flow-field tracing of the original brush directions (best hero candidate, most striking)"
+    },
+    {
+      "path": "/Users/anzalhussainabidi/personal/halley/repos/fasthands/demos/out-davinci.png",
+      "kind": "png",
+      "width": 602,
+      "height": 402,
+      "bytes": 330120,
+      "shows": "Mona Lisa engraved with 4,601 one-pixel cross-hatch strokes"
+    },
+    {
+      "path": "/Users/anzalhussainabidi/personal/halley/repos/fasthands/demos/out-drawing.png",
+      "kind": "png",
+      "width": 602,
+      "height": 402,
+      "bytes": 215031,
+      "shows": "Mona Lisa sketched like a hand with 2,400 curved strokes along the painting's gradient field"
+    },
+    {
+      "path": "/Users/anzalhussainabidi/personal/halley/repos/fasthands/demos/out-monalisa-color.png",
+      "kind": "png",
+      "width": 602,
+      "height": 402,
+      "bytes": 240216,
+      "shows": "Mona Lisa in colour, 3,026 strokes across 52 palette layers by clicking the app's swatch and brush buttons"
+    },
+    {
+      "path": "/Users/anzalhussainabidi/personal/halley/repos/fasthands/demos/out-icon.png",
+      "kind": "png",
+      "width": 1280,
+      "height": 800,
+      "bytes": 53015,
+      "shows": "fasthands bolt logo drawn with brush strokes inside the Excalidraw web app (full app UI visible)"
+    },
+    {
+      "path": "/Users/anzalhussainabidi/personal/halley/repos/fasthands/demos/out-comic.gif",
+      "kind": "gif",
+      "width": 602,
+      "height": 402,
+      "bytes": 74442,
+      "shows": "8-frame stop-motion rocket launch comic with boiling hand-drawn lines, drawn by the agent"
+    },
+    {
+      "path": "/Users/anzalhussainabidi/personal/halley/repos/fasthands/demos/out-comic-strip.png",
+      "kind": "png",
+      "width": 2426,
+      "height": 810,
+      "bytes": 166286,
+      "shows": "The same rocket-launch comic as a 4x2 contact sheet of all 8 frames"
+    }
+  ],
+  "notes": "Hero: out-starrynight-v2.png (colour, high impact) or out-comic.gif for motion. All media are 602x402 except icon (1280x800) and comic strip (2426x810); small bitmaps, so do not upscale past 1x. Skip demos/out-painting.png (byte-identical duplicate of out-starrynight-v2.png, md5 match), out-starrynight.png (older version) and out-excalidraw.png (not referenced by README). Not on npm (404) and no git tags or GitHub releases, so version is null; package.json says 0.1.0. Numbers come from the README's keyless deterministic benchmark (scripted oracle policy, synthetic local fixtures), not re-run here (Chromium/Playwright not installed locally, and the README states the numbers measure loop cost, not model intelligence). Per the owner's rules the README's honest trade-offs and competitor comparison table were deliberately left out; do not quote the competitor names that appear in the source README. The 2,000-element figure is per-observation, uncapped, as the README specifies."
+}

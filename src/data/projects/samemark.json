@@ -1,0 +1,110 @@
+{
+  "slug": "samemark",
+  "name": "samemark",
+  "repo": "halleylabs/samemark",
+  "category": "Libraries",
+  "language": "JavaScript",
+  "license": "MIT",
+  "version": "0.1.0",
+  "tagline": "The same mdast as remark-parse, up to 10x faster, with streaming for chat UIs",
+  "summary": "samemark returns the same mdast tree as remark-parse with GFM, positions included, and replaces it in a unified pipeline with one import. Your remark plugins keep working, and the whole markdown to HTML run gets several times faster. A second entry, samemark/stream, parses chat answers incrementally so streaming UIs stop re-parsing the whole message on every token.",
+  "metrics": [
+    {
+      "value": "6.2x to 10.3x",
+      "label": "faster end to end, markdown to HTML, with identical output on every file",
+      "source": "README.md: **6.2x to 10.3x faster** with samemark as the parser, across six inputs on a GitHub Actions runner (Node 24, median of"
+    },
+    {
+      "value": "60x",
+      "label": "less main-thread time streaming a 30,000-character chat answer into the page",
+      "source": "README.md: **60x less main-thread time** than react-markdown re-rendering the whole message on every chunk, and 77x less with the"
+    },
+    {
+      "value": "28x to 47x",
+      "label": "faster parsing alone, with the same syntax tree",
+      "source": "README.md: 7 rounds, identical HTML on every file). Parsing alone is 28x to 47x faster; the rest of the pipeline is unchanged,"
+    }
+  ],
+  "features": [
+    "Same mdast as mdast-util-from-markdown with GFM, positions included, checked node by node against micromark",
+    "remarkParseFast is a drop-in for remark-parse in unified, Astro and react-markdown",
+    "remark-gfm, remark-frontmatter and remark-math are handled natively; other extensions are passed to the real parser, so the output stays correct",
+    "samemark/stream parses chat output incrementally and matches a full parse after every chunk, so finished blocks keep their object identity for React.memo",
+    "Plain JavaScript, no native binary, runs in Node 18+, browsers, Deno, Bun and edge runtimes"
+  ],
+  "how_it_works": [
+    "A hand-written fast path parses markdown straight into the mdast node shapes micromark produces, with no micromark at parse time.",
+    "Any setup it does not reproduce exactly (other micromark extensions, custom frontmatter fences) is detected and handed to mdast-util-from-markdown, so you always get micromark's answer.",
+    "The stream parser re-parses only the unfinished tail of the message and reuses every finished block, so a push costs the new text, not the whole answer."
+  ],
+  "install": "npm install samemark",
+  "quickstart": "import {unified} from 'unified'\nimport remarkGfm from 'remark-gfm'\nimport remarkRehype from 'remark-rehype'\nimport rehypeStringify from 'rehype-stringify'\nimport remarkParseFast from 'samemark'\n\nconst file = await unified()\n  .use(remarkParseFast) // instead of remark-parse\n  .use(remarkGfm)\n  .use(remarkRehype)\n  .use(rehypeStringify)\n  .process('# Hello *world*')",
+  "links": {
+    "github": "https://github.com/halleylabs/samemark",
+    "site": null,
+    "docs": "https://github.com/halleylabs/samemark#readme",
+    "npm": "https://www.npmjs.com/package/samemark",
+    "pypi": null,
+    "crates": null,
+    "demo": "https://halleylabs.dev/samemark/"
+  },
+  "media": [
+    {
+      "path": "/Users/anzalhussainabidi/personal/samemark/assets/demo-stream.gif",
+      "kind": "gif",
+      "width": 880,
+      "height": 680,
+      "bytes": 2808572,
+      "shows": "Live demo capture, 11.6 s: the same 10,000 character chat answer streams into react-markdown (left) and samemark/stream (right) with per-update timings, sparklines and a badge showing both panes hold identical HTML"
+    },
+    {
+      "path": "/Users/anzalhussainabidi/personal/samemark/assets/e2e-speedup-light.svg",
+      "kind": "svg",
+      "width": 880,
+      "height": 446,
+      "bytes": 7167,
+      "shows": "Bar chart, light theme: end to end markdown to HTML time for six inputs, remark-parse against samemark, 6.2x to 10.3x faster (5.00 s down to 486 ms on the Node.js API docs)"
+    },
+    {
+      "path": "/Users/anzalhussainabidi/personal/samemark/assets/e2e-speedup-dark.svg",
+      "kind": "svg",
+      "width": 880,
+      "height": 446,
+      "bytes": 7167,
+      "shows": "Same end to end speedup chart, dark theme"
+    },
+    {
+      "path": "/Users/anzalhussainabidi/personal/samemark/assets/stream-dom-light.svg",
+      "kind": "svg",
+      "width": 880,
+      "height": 490,
+      "bytes": 6318,
+      "shows": "Grouped bars, light theme: main-thread time streaming a 30,000 character answer into the DOM at no throttling, 4x and 6x CPU throttle; react-markdown 11.29 s / 50.91 s / 79.43 s, samemark/stream 187 ms / 669 ms / 1.03 s"
+    },
+    {
+      "path": "/Users/anzalhussainabidi/personal/samemark/assets/stream-dom-dark.svg",
+      "kind": "svg",
+      "width": 880,
+      "height": 490,
+      "bytes": 6318,
+      "shows": "Same streaming DOM chart, dark theme"
+    },
+    {
+      "path": "/Users/anzalhussainabidi/personal/samemark/assets/stream-growth-light.svg",
+      "kind": "svg",
+      "width": 880,
+      "height": 462,
+      "bytes": 5845,
+      "shows": "Line chart, light theme: total time to stream an answer of 10,451, 30,416 and 100,193 characters, full re-parse per push against samemark/stream (9,232 ms down to 133 ms at 100k characters)"
+    },
+    {
+      "path": "/Users/anzalhussainabidi/personal/samemark/assets/stream-growth-dark.svg",
+      "kind": "svg",
+      "width": 880,
+      "height": 462,
+      "bytes": 5845,
+      "shows": "Same stream growth chart, dark theme"
+    }
+  ],
+  "notes": "Hero: the demo GIF (assets/demo-stream.gif, 880x680, 2.8 MB) or the live demo link; the light/dark SVG pairs are for theme-aware charts. Version 0.1.0 verified on npm (npm view) and as git tag; no GitHub release object exists, only the tag and CHANGELOG. All benchmark numbers are from CI run 38036885270 as stated in the README (not re-run here); metrics are quoted from README lines, the first two are single README lines with markdown bold kept. Metric 2 is the unthrottled 30,000 character Chromium run; the same run at 6x CPU throttle gives 77x less (README table row: '| 6x slower | (c) stream parser + memoised blocks | 750 | 1.03 s (**77.0x** less) | 1.1 ms | 3.2 ms | 45 ms | 31/31 |'). Other sourced facts available: Astro site build 29.6 s to 22.9 s ('Building a 239-page Astro site took 29.6 s with `remark-parse` and 22.9 s with samemark (23% less).'); identity checks: 4,780 npm READMEs, 652 CommonMark examples and tens of millions of fuzz inputs all identical (README 'How identity is verified'). The live site is hosted at halleylabs.dev/samemark/ (also anzal1.github.io/samemark in launch notes, which predates the org move; repo homepage field says halleylabs.dev/samemark/). Launch kit in samemark-launch/ has no media files. Not verified: whether the live demo is currently reachable. Language is JavaScript (GitHub and package.json agree)."
+}

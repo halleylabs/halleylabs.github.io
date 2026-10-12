@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.astro/
+previews/
+figures/*/shots/
+figures/*/hover-test.html
+vendor/anatomy/examples/
+.DS_Store

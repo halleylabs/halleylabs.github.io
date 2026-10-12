@@ -1,0 +1,61 @@
+---
+import "../styles/global.css";
+import "../styles/iso.css";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+interface Props { title: string; description: string; og?: string; jsonld?: object[]; night?: boolean }
+const { title, description, og = "/og.jpg", jsonld = [], night = false } = Astro.props;
+const url = new URL(Astro.url.pathname, Astro.site).href;
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={url} />
+  <meta name="theme-color" content={night ? "#0c0b0a" : "#F6F4EF"} />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Halley" />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:url" content={url} />
+  <meta property="og:image" content={new URL(og, Astro.site).href} />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preload" href="/fonts/fraunces.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="/fonts/instrument-sans.woff2" as="font" type="font/woff2" crossorigin />
+  {jsonld.map((j) => <script type="application/ld+json" set:html={JSON.stringify(j)} />)}
+</head>
+<body class:list={{ "starts-night": night }}>
+  <a class="skip" href="#main">Skip to content</a>
+  <Header />
+  <main id="main"><slot /></main>
+  <Footer />
+  <script>
+    import Lenis from "lenis";
+    const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const q = new URLSearchParams(location.search);
+    // The same scroll feel as the portfolio. Off for reduced motion and for capture.
+    if (!still && !q.has("nolenis")) {
+      const lenis = new Lenis({ lerp: 0.085, wheelMultiplier: 0.9, touchMultiplier: 1.4 });
+      (window as any).__lenis = lenis;
+      const raf = (t: number) => { lenis.raf(t); requestAnimationFrame(raf); };
+      requestAnimationFrame(raf);
+    }
+    // Every engraved line knows its own length, so it can draw itself in.
+    document.querySelectorAll<SVGGeometryElement>(".art .d").forEach((p) => { try { p.style.setProperty("--len", String(Math.ceil(p.getTotalLength()) + 2)); } catch {} });
+    // Reveals: once, when an element is properly on screen; skipped if it was already visible on load.
+    const io = new IntersectionObserver((entries) => entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("is-in"); io.unobserve(e.target); } }), { threshold: 0.16, rootMargin: "0px 0px -6% 0px" });
+    document.querySelectorAll(".reveal, [data-reveal-plate], [data-reveal-rules]").forEach((el) => io.observe(el));
+    if (q.has("all")) document.querySelectorAll(".reveal, [data-reveal-plate], [data-reveal-rules]").forEach((el) => el.classList.add("is-in"));
+  </script>
+  <style is:global>
+    .skip { position: absolute; left: -999px; top: 12px; z-index: 99; background: var(--color-paper); color: var(--color-t1); padding: 10px 14px; border-radius: var(--r3); }
+    .skip:focus { left: var(--gutter); }
+  </style>
+</body>
+</html>

@@ -1,0 +1,53 @@
+{
+  "slug": "pact",
+  "name": "Pact",
+  "repo": "halleylabs/pact",
+  "category": "Agent infrastructure",
+  "language": "Go",
+  "license": "Apache-2.0",
+  "version": "0.1.1",
+  "tagline": "Let agents prove who sent them and what they may do, verified offline with no server",
+  "summary": "Pact is a cryptographic protocol where a human signs a narrowing-only delegation to an agent, and the agent signs every HTTP request. A provider verifies the whole chain locally from the request headers, with no token introspection, no auth server and no network calls. The Go library uses only the standard library, ships drop-in middleware and an OAuth bridge, and has a Python SDK that interoperates with it.",
+  "metrics": [
+    {
+      "value": "0",
+      "label": "network calls to verify an agent's identity, delegation chain and request",
+      "source": "README.md: All local. Zero network calls. Just math."
+    },
+    {
+      "value": "0",
+      "label": "third-party dependencies in the Go library, so no supply chain to audit",
+      "source": "README.md: No `go.sum`. No supply chain. No transitive dependencies. Just Go."
+    },
+    {
+      "value": "1 line",
+      "label": "of middleware to protect any route",
+      "source": "README.md: one line to protect any route"
+    }
+  ],
+  "features": [
+    "Self-sovereign Ed25519 identity with no registration",
+    "Narrowing-only delegation chains with expiry and depth limits, so a sub-agent can never gain permissions",
+    "Per-request RFC 9421 signatures instead of bearer tokens, so there is nothing to steal",
+    "Session identities: a persistent root key delegates to an ephemeral per-process key, revocable without touching the root",
+    "Drop-in Go middleware, an OAuth bridge for existing backends, a CLI and a Python SDK (pact-auth)"
+  ],
+  "how_it_works": [
+    "A human generates an Ed25519 key and signs a delegation naming the agent, its capabilities and an expiry.",
+    "The agent attaches its delegation chain and signs each request's method, path, timestamp and body digest.",
+    "The provider walks the chain, checks every signature, confirms the capabilities cover the request and that it is fresh, all from the request headers."
+  ],
+  "install": "go get github.com/halleylabs/pact",
+  "quickstart": "pact init --name alice --type human\npact delegate \\\n  --to agent.pub \\\n  --capabilities \"github:pr:create,repo=myorg/*;storage:read\" \\\n  --ttl 1h\npact verify --chain delegation.json",
+  "links": {
+    "github": "https://github.com/halleylabs/pact",
+    "site": null,
+    "docs": "https://github.com/halleylabs/pact/blob/main/SPEC.md",
+    "npm": null,
+    "pypi": "https://pypi.org/project/pact-auth/",
+    "crates": null,
+    "demo": null
+  },
+  "media": [],
+  "notes": "No media assets in the repo and the release (v0.1.1) has no attached files. License is Apache-2.0 (not MIT). Version 0.1.1 is the GitHub release tag; the Python SDK pact-auth 0.1.1 is confirmed on PyPI (https://pypi.org/pypi/pact-auth/json). The Go module is not on a registry beyond go get from GitHub. Verified by command: go.mod lists no requirements and there is no go.sum. The README has no benchmark or latency numbers (no Go benchmarks exist), so none are claimed. The README's comparison table names other auth systems; copy avoids naming them. The README has a long letter from an AI agent; it could be a quote block on the page but is not a metric. Some README snippets import github.com/pact-protocol/pact or reference github.com/anzal1/pact in the demo, which are stale paths; the go.mod module is github.com/halleylabs/pact, and the install command above uses that. Witness is a deployed use of Pact (the README says so), which makes a good cross-link."
+}

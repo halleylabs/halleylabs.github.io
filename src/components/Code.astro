@@ -1,0 +1,43 @@
+---
+import Icon from "./Icon.astro";
+interface Props { code: string; label?: string; prompt?: boolean }
+const { code, label = "Install", prompt = true } = Astro.props;
+---
+<div class="code">
+  <div class="bar">
+    <span class="t-label">{label}</span>
+    <button type="button" class="copy" data-copy={code} aria-label={`Copy: ${label}`}>
+      <span class="i i1"><Icon name="copy" size={15} /></span><span class="i i2"><Icon name="check" size={15} /></span>
+      <span class="txt">Copy</span>
+    </button>
+  </div>
+  <pre><code>{code.split("\n").map((l) => <span class="ln">{l.trim().startsWith("#") || l.trim().startsWith("//") ? <span class="cm">{l}</span> : prompt ? <><span class="pr">$</span>{l}</> : l}</span>)}</code></pre>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>(".code .copy").forEach((b) => {
+    if (b.dataset.bound) return; b.dataset.bound = "1";
+    b.addEventListener("click", async () => {
+      try { await navigator.clipboard.writeText(b.dataset.copy || ""); } catch {}
+      b.classList.add("done"); b.querySelector(".txt")!.textContent = "Copied";
+      setTimeout(() => { b.classList.remove("done"); b.querySelector(".txt")!.textContent = "Copy"; }, 1700);
+    });
+  });
+</script>
+
+<style>
+  .code { border-radius: var(--r4); background: var(--color-ink-2); color: var(--color-d1); overflow: hidden; box-shadow: inset 0 1px 0 rgba(255,255,255,.05), 0 30px 60px -40px rgba(12,11,10,.6); }
+  .bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 10px 10px 18px; border-bottom: 1px solid var(--dline); }
+  .bar .t-label { color: var(--color-d3); }
+  .copy { position: relative; display: inline-flex; align-items: center; gap: 8px; height: 32px; padding: 0 12px 0 10px; border: 0; border-radius: var(--r3); background: transparent; color: var(--color-d2); font: 500 13px/1 var(--font-sans); cursor: pointer; transition: background-color var(--t-hover) var(--ease), color var(--t-hover) var(--ease); }
+  .copy:hover { background: rgba(236,232,223,.06); color: var(--color-d1); }
+  .i { position: relative; width: 15px; height: 15px; display: grid; place-items: center; }
+  .i2 { position: absolute; left: 10px; opacity: 0; transform: scale(.6); }
+  .i1, .i2 { transition: opacity var(--t-mark) var(--ease), transform var(--t-mark) var(--ease); }
+  .copy.done .i1 { opacity: 0; transform: scale(.6); }
+  .copy.done .i2 { opacity: 1; transform: none; }
+  pre { margin: 0; padding: 20px 20px 22px; overflow-x: auto; font: 400 14.5px/1.75 var(--font-mono); white-space: pre-wrap; overflow-wrap: anywhere; }
+  .ln { display: block; }
+  .pr { color: var(--color-d3); margin-right: 10px; user-select: none; }
+  .cm { color: var(--color-d3); }
+</style>

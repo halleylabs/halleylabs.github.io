@@ -1,0 +1,47 @@
+---
+// Halley's icon set. One 24px grid, 1.5 stroke, round caps and joins, arrowheads at the same 5.5px
+// reach, optical centring by hand. Brand marks are filled and sized to the same optical weight.
+import { siGithub, siX } from "simple-icons";
+
+interface Props { name: Name; size?: number; class?: string; label?: string }
+type Name = "arrow-right" | "arrow-up-right" | "arrow-down" | "plus" | "close" | "menu" | "copy" | "check" | "mail" | "star" | "play" | "spark" | "github" | "x" | "linkedin" | "globe" | "book";
+
+const { name, size = 18, class: cls = "", label } = Astro.props;
+
+const stroke: Record<string, string> = {
+  "arrow-right": "M4.5 12h14.5M13.5 6.5 19 12l-5.5 5.5",
+  "arrow-up-right": "M7 17 17 7M8.75 7H17v8.25",
+  "arrow-down": "M12 4.5V19M6.5 13.5 12 19l5.5-5.5",
+  plus: "M12 5v14M5 12h14",
+  close: "M6.25 6.25l11.5 11.5M17.75 6.25 6.25 17.75",
+  menu: "M4.5 9h15M4.5 15h15",
+  copy: "M9 9h9.25A.75.75 0 0 1 19 9.75V19a.75.75 0 0 1-.75.75H9.75A.75.75 0 0 1 9 19V9.75A.75.75 0 0 1 9.75 9ZM15 9V5.75A.75.75 0 0 0 14.25 5H5.75A.75.75 0 0 0 5 5.75v8.5c0 .41.34.75.75.75H9",
+  check: "M5 12.5 9.75 17 19 7.25",
+  mail: "M4.75 6.5h14.5c.41 0 .75.34.75.75v9.5c0 .41-.34.75-.75.75H4.75a.75.75 0 0 1-.75-.75v-9.5c0-.41.34-.75.75-.75ZM4.5 7.25l7.5 6 7.5-6",
+  star: "m12 4.75 2.2 4.46 4.92.72-3.56 3.47.84 4.9L12 16.02l-4.4 2.28.84-4.9-3.56-3.47 4.92-.72Z",
+  play: "M8.5 6.25v11.5L18 12Z",
+  spark: "M12 4v4M12 16v4M4 12h4M16 12h4M7 7l1.75 1.75M15.25 15.25 17 17M17 7l-1.75 1.75M8.75 15.25 7 17",
+  globe: "M12 4.25a7.75 7.75 0 1 0 0 15.5 7.75 7.75 0 0 0 0-15.5ZM4.5 12h15M12 4.25c2.1 2.2 3 4.75 3 7.75s-.9 5.55-3 7.75c-2.1-2.2-3-4.75-3-7.75s.9-5.55 3-7.75Z",
+  book: "M5 5.75C5 5.34 5.34 5 5.75 5H10a2 2 0 0 1 2 2v12a1.75 1.75 0 0 0-1.75-1.75h-4.5A.75.75 0 0 1 5 16.5Zm14 0a.75.75 0 0 0-.75-.75H14a2 2 0 0 0-2 2v12a1.75 1.75 0 0 1 1.75-1.75h4.5a.75.75 0 0 0 .75-.75Z",
+};
+const filled: Record<string, { d: string; scale: number }> = {
+  github: { d: siGithub.path, scale: 0.86 },
+  x: { d: siX.path, scale: 0.76 },
+  linkedin: { d: "M3.5 5.25A1.75 1.75 0 0 1 5.25 3.5h13.5A1.75 1.75 0 0 1 20.5 5.25v13.5a1.75 1.75 0 0 1-1.75 1.75H5.25A1.75 1.75 0 0 1 3.5 18.75Zm4.1 4.2v7.6h2.45v-7.6Zm1.22-3.8a1.42 1.42 0 1 0 0 2.84 1.42 1.42 0 0 0 0-2.84Zm3.06 3.8v7.6h2.44v-3.98c0-1.05.2-2.07 1.5-2.07 1.28 0 1.3 1.2 1.3 2.14v3.91h2.44v-4.4c0-2.15-.46-3.81-2.97-3.81-1.2 0-2.02.66-2.35 1.29h-.03V9.45Z", scale: 0.9 },
+};
+const f = filled[name];
+const a11y = label ? { role: "img" as const, "aria-label": label } : { "aria-hidden": "true" as const };
+---
+{f ? (
+  <svg class={`ico ${cls}`} width={size} height={size} viewBox="0 0 24 24" {...a11y}>
+    <path d={f.d} fill="currentColor" transform={`translate(${12 - 12 * f.scale} ${12 - 12 * f.scale}) scale(${f.scale})`} />
+  </svg>
+) : (
+  <svg class={`ico ${cls}`} width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" {...a11y}>
+    <path d={stroke[name]} />
+  </svg>
+)}
+
+<style>
+  .ico { flex: none; }
+</style>

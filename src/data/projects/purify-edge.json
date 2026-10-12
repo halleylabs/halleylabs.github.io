@@ -1,0 +1,86 @@
+{
+  "slug": "purify-edge",
+  "name": "purify-edge",
+  "repo": "halleylabs/purify-edge",
+  "category": "Libraries",
+  "language": "JavaScript",
+  "license": "MIT",
+  "version": "0.1.2",
+  "tagline": "DOMPurify without jsdom: identical output, 4x faster, runs on Cloudflare Workers",
+  "summary": "purify-edge runs the unmodified DOMPurify on a small parse5-based DOM instead of jsdom. Output is byte-identical to DOMPurify on jsdom, it is about 65 KB gzipped, and it runs on Cloudflare Workers and other edge runtimes where jsdom cannot. Migrating from isomorphic-dompurify is a one-line import change.",
+  "metrics": [
+    {
+      "value": "100%",
+      "label": "of DOMPurify's 223 official test vectors give byte-identical output to DOMPurify on jsdom",
+      "source": "README.md: | purify-edge | 100% (223 of 223) | 0 | 0 |"
+    },
+    {
+      "value": "4.3x to 4.7x",
+      "label": "faster than DOMPurify on jsdom, on 2,000 chat responses and 50 large newsletter documents",
+      "source": "README.md: So purify-edge is 4.3x to 4.7x faster than DOMPurify on jsdom, with 2.9x to 4.0x lower peak memory."
+    },
+    {
+      "value": "2.9x to 4.0x",
+      "label": "lower peak memory than DOMPurify on jsdom",
+      "source": "README.md: So purify-edge is 4.3x to 4.7x faster than DOMPurify on jsdom, with 2.9x to 4.0x lower peak memory."
+    }
+  ],
+  "features": [
+    "The sanitizer is DOMPurify 3.4.16, pinned and unpatched, so every allow list, hook and config option carries over",
+    "Passes DOMPurify's own official suite (984 tests, 1,247 assertions) with results identical to the jsdom run",
+    "Runs in workerd (Cloudflare Workers) without the Node compatibility flag, in the Vercel edge isolate, and on Node 20 to 24",
+    "Bundle is 218.5 KB minified, 65.6 KB gzipped, with parse5, DOMPurify and the DOM shim included",
+    "Drop-in for isomorphic-dompurify: change one import line"
+  ],
+  "how_it_works": [
+    "About 800 lines of commented JavaScript implement the window and DOM that DOMPurify calls, with HTML parsing and serialization done by parse5.",
+    "DOMPurify runs on that window exactly as it would on jsdom, so the sanitizing rules are DOMPurify's own.",
+    "Parity with DOMPurify on jsdom is checked by the official suite, a differential fuzzer and parity corpora, all run in CI."
+  ],
+  "install": "npm install purify-edge",
+  "quickstart": "import DOMPurify from \"purify-edge\";\n\nDOMPurify.sanitize('<img src=x onerror=alert(1)>hello');\n// '<img src=\"x\">hello'",
+  "links": {
+    "github": "https://github.com/halleylabs/purify-edge",
+    "site": null,
+    "docs": "https://github.com/halleylabs/purify-edge/blob/main/docs/recipes.md",
+    "npm": "https://www.npmjs.com/package/purify-edge",
+    "pypi": null,
+    "crates": null,
+    "demo": null
+  },
+  "media": [
+    {
+      "path": "/Users/anzalhussainabidi/personal/purify-edge/assets/parity.png",
+      "kind": "png",
+      "width": 3200,
+      "height": 1800,
+      "bytes": 210528,
+      "shows": "Bar chart titled 'Same output as isomorphic-dompurify, without jsdom': share of DOMPurify's 223 official vectors with byte-identical output (purify-edge 100%, sanitize-html 43.5%, rehype-sanitize 9.4%); footer: 4.3x faster, 2.9x less memory than isomorphic-dompurify, 65 KB gzip, runs on Workers"
+    },
+    {
+      "path": "/Users/anzalhussainabidi/personal/purify-edge/assets/demo.gif",
+      "kind": "gif",
+      "width": 1400,
+      "height": 450,
+      "bytes": 111915,
+      "shows": "Terminal clip, 12.2 s: three hostile payloads sanitized by DOMPurify on jsdom and by purify-edge with 'identical' on each line, then purify-edge inside workerd with typeof document undefined, 3/3 identical, bundle 214 KB minified"
+    },
+    {
+      "path": "/Users/anzalhussainabidi/personal/purify-edge-launch/demo.mp4",
+      "kind": "mp4",
+      "width": 1400,
+      "height": 450,
+      "bytes": 149537,
+      "shows": "Same terminal clip as demo.gif, as video"
+    },
+    {
+      "path": "/Users/anzalhussainabidi/personal/purify-edge-launch/demo-x.mp4",
+      "kind": "mp4",
+      "width": 1600,
+      "height": 900,
+      "bytes": 148369,
+      "shows": "Same terminal clip re-framed 16:9 on a black background (12.2 s); good for a wide hero or video block"
+    }
+  ],
+  "notes": "Hero: the demo clip (demo-x.mp4 at 16:9, or demo.gif) shows the mechanism without naming other projects in the frame; assets/parity.png is the best static image but names sanitize-html and rehype-sanitize in the chart. The first metric uses the 223-vector parity table; the official-suite and fuzz facts are in features: 'DOMPurify's own official test suite, unmodified, run on the shim window: 984 tests, 1,247 assertions, identical to the jsdom run assertion by assertion, 0 failures.' and '200,000 inputs, 800,000 comparisons, 0 differences' on the four default configs. Speed and memory numbers are from README tables (Apple M5 Max, Node 24.20.0, median of 5, DOMPurify 3.4.16 vs isomorphic-dompurify 4.4.0); not re-run here. Memory figures 1,236 MB to 307 MB come from the README table row for corpus c (peak RSS c). Bundle size from results/edge-size.json: esmMin 218774 bytes, esmGzip 65647 bytes. The demo clip's 'bundle 214 KB minified' differs slightly from the README's 218.5 KB (different build at record time); prefer the README figure. Version 0.1.2 verified via npm view, git tag and GitHub release. License: package.json and LICENSE are MIT; GitHub's API reports NOASSERTION (it did not detect the license). Not verified: Deno and Bun (README says untested). README also says versions are verified only against DOMPurify 3.4.16."
+}

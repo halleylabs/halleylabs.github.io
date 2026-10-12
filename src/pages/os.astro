@@ -1,0 +1,84 @@
+---
+import Base from "../layouts/Base.astro";
+import Button from "../components/Button.astro";
+import Icon from "../components/Icon.astro";
+import { bySlug } from "../lib/projects";
+const parts = [
+  { n: "01", t: "Chat and voice, one memory", d: "The same agent answers on the web, on the phone and by voice, and remembers the person across all of them. A conversation started in chat can finish on a call.", rel: ["tring"] },
+  { n: "02", t: "Workflows you can read", d: "Agents are designed as versioned workflows. Every run can be replayed, every change tested against real failures before it ships, and any version rolled back.", rel: ["agentreplay", "witness"] },
+  { n: "03", t: "Small models for routine steps", d: "Task-specific small models handle routing, extraction and checks, quickly and cheaply, so the large models are kept for the hard reasoning.", rel: ["guardian"] },
+  { n: "04", t: "Integrations that act", d: "Agents work through the tools a team already uses, with identity and permissions they can prove, so they can take actions and not only talk about them.", rel: ["pact"] },
+];
+---
+<Base title="An operating system for AI at work | Halley" description="Halley's flagship, in development: one platform where a team's agents talk, listen and act across chat and voice." night>
+  <section class="os-hero on-night" data-tone="night">
+    <canvas id="ossky" aria-hidden="true"></canvas>
+    <div class="frame copy">
+      <p class="t-label kick"><span class="pulse"></span>Flagship · In development</p>
+      <h1 class="t-display">An operating system for AI at work.</h1>
+      <div class="row">
+        <p class="t-lede">One place where a team's agents talk, listen and act. It fits whatever a team needs, not one industry.</p>
+        <Button href="mailto:hello@halleylabs.dev?subject=Early%20access" variant="light">Ask for early access</Button>
+      </div>
+    </div>
+  </section>
+
+  <section class="section parts"><div class="frame">
+    <p class="t-label lab reveal">Four parts</p>
+    <div class="grid">
+      {parts.map((p, i) => (
+        <article class="part reveal" data-delay={String(i % 2)}>
+          <span class="t-data num">{p.n}</span>
+          <h2 class="t-h3">{p.t}</h2>
+          <p>{p.d}</p>
+          <div class="rel">
+            <span class="t-label">Related open source</span>
+            {p.rel.map((s) => { const r = bySlug(s); return r && <a href={`/work/${r.slug}/`}>{r.name}<Icon name="arrow-right" size={15} /></a>; })}
+          </div>
+        </article>
+      ))}
+    </div>
+  </div></section>
+
+  <section class="section status"><div class="frame grid-12">
+    <h2 class="t-h2 reveal">Where it stands.</h2>
+    <div class="st reveal" data-delay="1">
+      <p class="t-lede">It is in development. We are building it in the open where we can, shipping the pieces as open source first, and opening early access to a small number of teams who want to shape it.</p>
+      <div class="acts"><Button href="mailto:hello@halleylabs.dev?subject=Early%20access">Ask for early access</Button><Button href="/work/" variant="line" icon="none">See the open source</Button></div>
+    </div>
+  </div></section>
+</Base>
+
+<script>
+  import { mountComet } from "../lib/comet.js";
+  const c = mountComet(document.getElementById("ossky") as HTMLCanvasElement, { home: [0.55, 0.12], pointerTarget: window, seed: 4242 });
+  new IntersectionObserver((e) => e.forEach((x) => (x.isIntersecting ? c?.start() : c?.stop()))).observe(document.querySelector(".os-hero")!);
+</script>
+
+<style>
+  .os-hero { position: relative; min-height: 100svh; display: flex; align-items: flex-end; overflow: hidden; }
+  .os-hero canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .copy { position: relative; z-index: 2; padding-bottom: clamp(56px, 11vh, 120px); }
+  .kick { display: flex; align-items: center; gap: 10px; color: var(--color-d3); margin-bottom: 26px; }
+  .pulse { width: 6px; height: 6px; border-radius: 50%; background: var(--color-comet); animation: pulse 2.8s ease-out infinite; }
+  @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(200,55,31,.5); } 70% { box-shadow: 0 0 0 9px rgba(200,55,31,0); } 100% { box-shadow: none; } }
+  h1 { color: var(--color-d1); }
+  .row { display: flex; justify-content: space-between; align-items: flex-end; gap: 28px 48px; flex-wrap: wrap; margin-top: 32px; }
+  .row .t-lede { color: var(--color-d2); flex: 1 1 520px; }
+  .lab { color: var(--color-t3); margin-bottom: 28px; }
+  .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-top: 1px solid var(--color-rule); border-left: 1px solid var(--color-rule); }
+  .part { padding: 30px 30px 28px; border-right: 1px solid var(--color-rule); border-bottom: 1px solid var(--color-rule); display: flex; flex-direction: column; min-height: 340px; }
+  .num { color: var(--color-t3); }
+  .part h2 { margin: 54px 0 14px; }
+  .part p { color: var(--color-t2); }
+  .rel { margin-top: auto; padding-top: 26px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 20px; }
+  .rel .t-label { color: var(--color-t3); flex-basis: 100%; }
+  .rel a { display: inline-flex; align-items: center; gap: 8px; font: 400 20px/1.2 var(--font-serif); font-variation-settings: "opsz" 72; }
+  .rel a :global(.ico) { transition: transform var(--t-mark) var(--ease); }
+  .rel a:hover :global(.ico) { transform: translateX(3px); }
+  .status .t-h2 { grid-column: 1 / span 5; }
+  .st { grid-column: 7 / span 6; }
+  .st .t-lede { color: var(--color-t2); }
+  .acts { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+  @media (max-width: 860px) { .grid { grid-template-columns: 1fr; } .status .t-h2, .st { grid-column: 1 / -1; } .st { margin-top: 24px; } }
+</style>

@@ -1,0 +1,206 @@
+---
+import Base from "../layouts/Base.astro";
+import Button from "../components/Button.astro";
+import SectionHead from "../components/SectionHead.astro";
+import Plate from "../components/Plate.astro";
+import Almanac from "../components/Almanac.astro";
+import Seal from "../components/Seal.astro";
+import { featured, projects } from "../lib/projects";
+
+const org = {
+  "@context": "https://schema.org", "@type": "Organization", name: "Halley", url: "https://halleylabs.dev/",
+  logo: "https://halleylabs.dev/apple-touch-icon.png", foundingDate: "2026-10", email: "hello@halleylabs.dev",
+  description: "An independent AI lab building agents and the tools around them, mostly open source.",
+  founder: { "@type": "Person", name: "Anzal Husain Abidi", url: "https://anzalabidi.dev", sameAs: ["https://github.com/anzal1", "https://www.linkedin.com/in/anzal-husain-abidi-740a40204", "https://x.com/AnzalAbidi"] },
+  member: [
+    { "@type": "Person", name: "Anzal Husain Abidi", url: "https://anzalabidi.dev" },
+    { "@type": "Person", name: "Faiz Ullah", url: "https://faiz-ai.dev", sameAs: ["https://github.com/Faizullah9181", "https://x.com/dot_ragnar"] },
+  ],
+  sameAs: ["https://github.com/halleylabs"],
+};
+---
+<Base title="Halley: agents you can rely on, built in the open" description="Halley is an independent AI lab. We build agents and the tools around them, ship our flagships here, and open-source most of what we make." night jsonld={[org]}>
+
+  <!-- I. Night: who we are, under a live comet. The pointer is the Sun. -->
+  <section class="night on-night" data-tone="night" data-night>
+    <div class="stage">
+      <canvas id="sky" aria-hidden="true"></canvas>
+      <div class="grain" aria-hidden="true"></div>
+      <div class="copy frame">
+        <p class="t-label kicker">An independent AI lab</p>
+        <h1 class="t-display"><span class="dev"><span>Agents you can rely on,</span></span><span class="dev"><span>built in the open.</span></span></h1>
+        <div class="row">
+          <p class="t-lede sub">Halley is where we build our flagships and share the tools behind them, most of it open source, with the numbers that show it works.</p>
+          <div class="acts"><Button href="/work/" variant="light">See the work</Button><Button href="/os/" variant="ghost-dark" icon="none">The flagship</Button></div>
+        </div>
+      </div>
+      <div class="dawn" aria-hidden="true"></div>
+      <div class="dawn-rim" aria-hidden="true"></div>
+      <!-- II. Paper: the lab in its own words, developing on the paper the comet's light leaves behind -->
+      <div class="intro"><div class="frame"><p class="t-read" data-develop>We are a small lab of engineers who build agents for real work: voice agents that answer phones, tools that keep coding agents inside the lines, recorders that make every model call replayable. When something we build is good, we give it away. When it is our best, it becomes a flagship.</p></div></div>
+    </div>
+  </section>
+
+
+  <!-- The flagship -->
+  <section class="section flag" id="flagship"><div class="frame grid-12">
+    <div class="fl-copy reveal">
+      <p class="t-label kick"><span class="pulse"></span>Flagship · In development</p>
+      <h2 class="t-h2">An operating system for AI at work.</h2>
+      <p class="t-lede">One place where a team's agents talk, listen and act, across chat and voice, with the tools the team already uses.</p>
+      <ol class="parts">
+        <li><span class="t-data">01</span>Chat and voice, with one memory of the person across both.</li>
+        <li><span class="t-data">02</span>Workflows you can read, test and roll back.</li>
+        <li><span class="t-data">03</span>Small task-specific models for the routine steps.</li>
+        <li><span class="t-data">04</span>Integrations, so agents act instead of only talking.</li>
+      </ol>
+      <div class="acts"><Button href="mailto:hello@halleylabs.dev?subject=Early%20access">Ask for early access</Button><Button href="/os/" variant="line" icon="none">How it works</Button></div>
+    </div>
+    <figure class="aperture reveal" data-delay="1" id="aperture">
+      <canvas id="flagsky" aria-hidden="true"></canvas>
+      <figcaption class="t-data">Move your pointer here. It is the Sun.</figcaption>
+    </figure>
+  </div></section>
+
+  <!-- From the bench -->
+  <section class="section bench" style="padding-top:0"><div class="frame">
+    <SectionHead label="From the bench" title="The latest releases." more={{ href: "https://github.com/halleylabs", text: "Everything on GitHub" }} />
+    <Almanac limit={5} />
+  </div></section>
+
+  <!-- The mission -->
+  <section class="section mission"><div class="frame">
+    <h2 class="t-h1" data-soften>We build the tools we need to make agents dependable, <em>and we give most of them away.</em></h2>
+  </div></section>
+
+  <!-- Open source -->
+  <section class="section work" style="padding-top:0"><div class="frame">
+    <SectionHead label="Open source" title="Fourteen projects, one bench." more={{ href: "/work/", text: `All ${projects.length} projects` }} />
+    <div class="plates">{featured.map((p, i) => <Plate project={p} index={i + 1} />)}</div>
+  </div></section>
+
+  <!-- People -->
+  <section class="section people" id="people"><div class="frame grid-12">
+    <div class="pp-copy reveal">
+      <p class="t-label kick">The people</p>
+      <h2 class="t-h2">Friends who build together, with room for more.</h2>
+      <p class="pp-lead">There are no ranks at Halley. Everyone here is a collaborator, and every project carries the names of the people who made it. If you want to build a flagship or keep an open-source project alive with us, there is a seal waiting for you.</p>
+      <Button href="mailto:hello@halleylabs.dev?subject=Build%20with%20Halley">Build with us</Button>
+    </div>
+    <div class="seals">
+      <div class="reveal"><Seal initial="A" name="Anzal Husain Abidi" href="https://anzalabidi.dev" links={[{ kind: "github", href: "https://github.com/anzal1", label: "GitHub" }, { kind: "linkedin", href: "https://www.linkedin.com/in/anzal-husain-abidi-740a40204", label: "LinkedIn" }, { kind: "x", href: "https://x.com/AnzalAbidi", label: "X" }]} /></div>
+      <div class="reveal" data-delay="1"><Seal initial="F" name="Faiz Ullah" href="https://faiz-ai.dev" links={[{ kind: "github", href: "https://github.com/Faizullah9181", label: "GitHub" }, { kind: "globe", href: "https://faiz-ai.dev", label: "website" }, { kind: "x", href: "https://x.com/dot_ragnar", label: "X" }]} /></div>
+      <div class="reveal" data-delay="2"><Seal initial="+" name="You" open href="mailto:hello@halleylabs.dev?subject=Build%20with%20Halley" /></div>
+    </div>
+  </div></section>
+</Base>
+
+<script>
+  import { mountComet } from "../lib/comet.js";
+  const q = new URLSearchParams(location.search);
+  const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const night = document.querySelector<HTMLElement>("[data-night]")!;
+  const stage = night.querySelector<HTMLElement>(".stage")!;
+  const copy = night.querySelector<HTMLElement>(".copy")!;
+  const portrait = innerHeight > innerWidth;
+  const sky = mountComet(document.getElementById("sky") as HTMLCanvasElement, { home: portrait ? [0.3, 0.26] : [0.5, 0.08], sunOffset: portrait ? [0.3, -0.12] : [0.34, -0.2], pointerTarget: window });
+  const flag = mountComet(document.getElementById("flagsky") as HTMLCanvasElement, { home: [0.42, 0.04], sunOffset: [0.36, -0.18], scale: 0.9, count: 14000, pointerTarget: document.getElementById("aperture"), seed: 99 });
+  const watch = (el: Element, on: () => void, off: () => void) => new IntersectionObserver((e) => e.forEach((x) => (x.isIntersecting ? on() : off())), { rootMargin: "80px" }).observe(el);
+  watch(night, () => sky?.start(), () => sky?.stop());
+  watch(document.getElementById("aperture")!, () => flag?.start(), () => flag?.stop());
+
+  const develop = document.querySelector<HTMLElement>("[data-develop]")!;
+  develop.innerHTML = develop.textContent!.split(" ").map((w) => `<span class="w">${w}</span>`).join(" ");
+  const words = [...develop.querySelectorAll<HTMLElement>(".w")];
+  const soften = document.querySelector<HTMLElement>("[data-soften]")!;
+
+  function frame() {
+    // the dawn: the comet's light floods out from its nucleus and leaves paper behind
+    const span = night.offsetHeight - innerHeight;
+    const p = Math.min(1, Math.max(0, scrollY / span));
+    const k = Math.min(1, Math.max(0, (p - 0.04) / 0.36)), e = k * k * (3 - 2 * k);
+    const [cx, cy] = sky ? sky.screenPos() : [innerWidth * 0.75, innerHeight * 0.4];
+    const far = Math.hypot(Math.max(cx, innerWidth - cx), Math.max(cy, innerHeight - cy));
+    stage.style.setProperty("--dx", `${cx}px`); stage.style.setProperty("--dy", `${cy}px`);
+    stage.style.setProperty("--dr", `${e * (far * 1.08 + 160)}px`);
+    stage.style.setProperty("--de", (e > 0 && e < 1 ? Math.sin(e * Math.PI) : 0).toFixed(3));
+    copy.style.opacity = String(1 - Math.min(1, p * 2.6));
+    copy.style.filter = `blur(${Math.min(10, p * 18)}px)`;
+    const dawned = e > 0.6;
+    if (dawned !== !!night.dataset.dawned) { if (dawned) night.dataset.dawned = "1"; else delete night.dataset.dawned; dispatchEvent(new Event("halley:tone")); }
+    // on the paper the comet leaves behind, the lab's own words develop, one by one
+    const ip = Math.min(1, Math.max(0, (p - 0.27) / 0.5));
+    stage.style.setProperty("--ie", Math.min(1, ip * 4).toFixed(3));
+    const lit = Math.round(ip * words.length);
+    words.forEach((w, i) => w.classList.toggle("on", i < lit));
+    // the mission's letters soften as it is read
+    const m = soften.getBoundingClientRect();
+    soften.style.setProperty("--soft", String(Math.round(Math.min(1, Math.max(0, (innerHeight - m.top) / (innerHeight + m.height))) * 100)));
+  }
+  addEventListener("scroll", frame, { passive: true }); addEventListener("resize", frame); frame();
+  if (still) { words.forEach((w) => w.classList.add("on")); }
+</script>
+
+<style>
+  /* I. night */
+  .night { position: relative; height: 230vh; }
+  .stage { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; }
+  .stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .grain { position: absolute; inset: 0; pointer-events: none; opacity: .06; mix-blend-mode: soft-light; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+  .copy { position: absolute; left: 0; right: 0; bottom: clamp(48px, 11vh, 120px); margin-inline: auto; z-index: 2; }
+  .kicker { color: var(--color-d3); margin-bottom: 28px; opacity: 0; animation: rise 1.1s var(--ease) .65s forwards; }
+  h1 { color: var(--color-d1); font-variation-settings: "opsz" 144, "SOFT" 30; }
+  .dev { display: block; overflow: hidden; padding-bottom: .09em; margin-bottom: -.09em; }
+  .dev > span { display: block; opacity: 0; filter: blur(16px) brightness(2.6); transform: translateY(.2em); animation: develop 1.7s var(--ease) .1s forwards; }
+  .dev:nth-child(2) > span { animation-delay: .28s; }
+  .row { display: flex; align-items: flex-end; justify-content: space-between; gap: 28px 48px; margin-top: 34px; flex-wrap: wrap; }
+  .sub { color: var(--color-d2); flex: 1 1 460px; opacity: 0; animation: rise 1.1s var(--ease) .8s forwards; }
+  .acts { display: flex; gap: 12px; flex-wrap: wrap; opacity: 0; animation: rise 1.1s var(--ease) .95s forwards; }
+  @keyframes develop { 55% { opacity: 1; filter: blur(2px) brightness(1.35); } to { opacity: 1; filter: none; transform: none; } }
+  @keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+  .dawn { position: absolute; inset: 0; z-index: 3; pointer-events: none; background: var(--color-paper);
+    -webkit-mask-image: radial-gradient(circle at var(--dx, 75%) var(--dy, 40%), #000 calc(var(--dr, 0px) - 2px), transparent var(--dr, 0px));
+    mask-image: radial-gradient(circle at var(--dx, 75%) var(--dy, 40%), #000 calc(var(--dr, 0px) - 2px), transparent var(--dr, 0px)); }
+  .dawn-rim { position: absolute; inset: 0; z-index: 4; pointer-events: none; opacity: var(--de, 0); mix-blend-mode: screen;
+    background: radial-gradient(circle at var(--dx, 75%) var(--dy, 40%), transparent calc(var(--dr, 0px) - 80px), rgba(255, 216, 190, .5) calc(var(--dr, 0px) - 6px), rgba(255, 170, 130, 0) calc(var(--dr, 0px) + 70px)); }
+
+  /* II. paper */
+  .intro { position: absolute; inset: 0; z-index: 5; display: flex; align-items: center; pointer-events: none; opacity: var(--ie, 0); transform: translateY(calc((1 - var(--ie, 0)) * 24px)); }
+  .intro p { color: var(--color-t1); }
+  .intro :global(.w) { opacity: .13; filter: blur(3px); transition: opacity .55s var(--ease), filter .55s var(--ease); }
+  .intro :global(.w.on) { opacity: 1; filter: none; }
+  .kick { color: var(--color-t3); display: flex; align-items: center; gap: 10px; margin-bottom: 22px; }
+  .pulse { width: 6px; height: 6px; border-radius: 50%; background: var(--color-comet); box-shadow: 0 0 0 0 rgba(200,55,31,.4); animation: pulse 2.8s ease-out infinite; }
+  @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(200,55,31,.45); } 70% { box-shadow: 0 0 0 9px rgba(200,55,31,0); } 100% { box-shadow: 0 0 0 0 rgba(200,55,31,0); } }
+
+  .flag { padding-top: clamp(40px, 5vw, 72px); }
+  .fl-copy { grid-column: 1 / span 5; align-self: center; }
+  .fl-copy .t-h2 { margin-bottom: 20px; }
+  .fl-copy .t-lede { color: var(--color-t2); }
+  .parts { list-style: none; margin: 32px 0 36px; padding: 0; border-top: 1px solid var(--color-rule); }
+  .parts li { display: grid; grid-template-columns: 34px 1fr; padding: 14px 0; border-bottom: 1px solid var(--color-rule); color: var(--color-t2); font-size: 16px; }
+  .parts .t-data { color: var(--color-t3); line-height: 1.9; }
+  .fl-copy .acts { opacity: 1; animation: none; }
+  .aperture { grid-column: 7 / span 6; position: relative; margin: 0; aspect-ratio: 5 / 4; border-radius: var(--r4); overflow: hidden; background: var(--color-ink); box-shadow: 0 0 0 1px rgba(12,11,10,.06), 0 50px 90px -50px rgba(40, 24, 12, .55), inset 0 1px 0 rgba(255,255,255,.06); }
+  .aperture canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .aperture figcaption { position: absolute; left: 22px; bottom: 18px; color: var(--color-d3); }
+
+  .mission { padding-block: clamp(120px, 15vw, 220px); }
+  .mission h2 { font-variation-settings: "opsz" 144, "SOFT" var(--soft, 0); }
+  .mission em { color: var(--color-t2); }
+
+  .plates { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--color-rule); border-left: 1px solid var(--color-rule); }
+
+  .pp-copy { grid-column: 1 / span 4; }
+  .pp-copy .t-h2 { margin-bottom: 20px; }
+  .pp-lead { color: var(--color-t2); margin-bottom: 32px; }
+  .seals { grid-column: 6 / span 7; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--col-gap); align-items: start; }
+
+  @media (max-width: 980px) {
+    .fl-copy, .aperture, .pp-copy, .seals { grid-column: 1 / -1; }
+    .aperture { margin-top: 48px; }
+    .seals { margin-top: 48px; }
+    .plates { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 640px) { .plates { grid-template-columns: 1fr; } .seals { gap: 14px; } }
+</style>
