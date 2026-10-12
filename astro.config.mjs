@@ -5,7 +5,7 @@ export default defineConfig({
   site: "https://halleylabs.dev",
   devToolbar: { enabled: false },
   trailingSlash: "always",
-  build: { format: "directory", inlineStylesheets: "auto" },
+  build: { format: "directory", inlineStylesheets: "always" },
   prefetch: { prefetchAll: true, defaultStrategy: "hover" },
   vite: { plugins: [tailwind()] },
 });

@@ -5,19 +5,22 @@ export function mountComet(canvas, opts = {}) {
   const o = Object.assign({ count: 26000, home: [0.5, 0.02], sunOffset: [0.34, -0.2], scale: 1, interactive: true, seed: 1234567 }, opts);
   const gl = canvas.getContext("webgl2", { antialias: false, alpha: false, premultipliedAlpha: false });
   if (!gl) return null;
-  const DPR = Math.min(devicePixelRatio || 1, 1.5);
   const phone = matchMedia("(max-width: 760px)").matches || (navigator.hardwareConcurrency || 8) <= 4;
+  // the comet is all soft light, so it loses nothing at a lower resolution on small screens
+  const DPR = Math.min(devicePixelRatio || 1, phone ? 1 : 1.5);
   const N = Math.round(o.count * (phone ? 0.35 : 1));
+  const HAZE = phone ? 4 : 2; // the wide glow pass draws every HAZE-th particle, that much brighter
   let rng = o.seed;
   const rand = () => ((rng = (rng * 1664525 + 1013904223) >>> 0) / 4294967296);
   const gauss = () => { let u = 0; while (!u) u = rand(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(6.2831853 * rand()); };
   const pos = new Float32Array(N * 3), vel = new Float32Array(N * 3), life = new Float32Array(N * 2), kind = new Float32Array(N);
+  const packed = new Float32Array(N * 5);
   let head = 0, W = 1, H = 1, aspect = 1, t = 0, light = 0, running = false, frame = 0, last = 0, boost = 0;
   const nucleus = { x: 0, y: 0, vx: 0, vy: 0 };
   const sun = { x: 0, y: 0, tx: 0, ty: 0, lastMove: -99 };
 
   const vs = `#version 300 es
-in vec3 a_pos; in vec2 a_life; in float a_kind;
+in vec2 a_pos; in vec2 a_life; in float a_kind;
 uniform vec2 u_scale; uniform float u_px; uniform float u_size;
 out float v_a; out float v_k; out float v_t;
 void main() {
@@ -44,7 +47,7 @@ void main() {
 in vec2 a; out vec2 v; void main() { v = a; gl_Position = vec4(a, 0.0, 1.0); }`;
   const qfs = `#version 300 es
 precision highp float;
-in vec2 v; uniform vec2 u_n; uniform vec2 u_sun; uniform float u_light; uniform vec2 u_scale; uniform vec3 u_bg;
+in vec2 v; uniform vec2 u_n; uniform vec2 u_sun; uniform float u_light; uniform vec2 u_scale; uniform vec3 u_bg; uniform float u_grain;
 out vec4 col;
 void main() {
   vec2 p = v / u_scale;
@@ -55,16 +58,33 @@ void main() {
   vec3 c = u_bg + vec3(1.0, 0.95, 0.9) * core + vec3(0.95, 0.5, 0.32) * coma + vec3(0.78, 0.22, 0.12) * halo;
   float s = length(p - u_sun);
   c += vec3(0.14, 0.1, 0.08) * exp(-s * s / 0.05) * 0.4;
-  float dither = fract(sin(dot(gl_FragCoord.xy, vec2(12.9898, 78.233))) * 43758.5453) / 255.0;
-  col = vec4(c + dither, 1.0);
+  float n = fract(sin(dot(gl_FragCoord.xy, vec2(12.9898, 78.233))) * 43758.5453);
+  c += (n - 0.5) * u_grain * (0.6 + 2.0 * max(c.r, max(c.g, c.b)));
+  col = vec4(c + n / 255.0, 1.0);
 }`;
   const shader = (type, src) => { const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s); if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s)); return s; };
   const program = (a, b) => { const p = gl.createProgram(); gl.attachShader(p, shader(gl.VERTEX_SHADER, a)); gl.attachShader(p, shader(gl.FRAGMENT_SHADER, b)); gl.linkProgram(p); return p; };
   const P = program(vs, fs), QP = program(qvs, qfs);
-  const bPos = gl.createBuffer(), bLife = gl.createBuffer(), bKind = gl.createBuffer(), bQ = gl.createBuffer();
+  const bP = gl.createBuffer(), bQ = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, bQ); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
-  const U = (p, n) => gl.getUniformLocation(p, n);
+  gl.bindBuffer(gl.ARRAY_BUFFER, bP); gl.bufferData(gl.ARRAY_BUFFER, packed.byteLength, gl.DYNAMIC_DRAW);
+  const uq = {}, up = {};
+  for (const n of ["u_n", "u_sun", "u_light", "u_scale", "u_bg", "u_grain"]) uq[n] = gl.getUniformLocation(QP, n);
+  for (const n of ["u_scale", "u_px", "u_light", "u_size", "u_gain", "u_sharp"]) up[n] = gl.getUniformLocation(P, n);
+  const qa = gl.getAttribLocation(QP, "a");
   const loc = { pos: gl.getAttribLocation(P, "a_pos"), life: gl.getAttribLocation(P, "a_life"), kind: gl.getAttribLocation(P, "a_kind") };
+  // two vertex arrays over the same buffer: every particle, and every HAZE-th particle for the glow
+  const vaoFor = (stride) => {
+    const v = gl.createVertexArray(); gl.bindVertexArray(v); gl.bindBuffer(gl.ARRAY_BUFFER, bP);
+    gl.enableVertexAttribArray(loc.pos); gl.vertexAttribPointer(loc.pos, 2, gl.FLOAT, false, stride, 0);
+    gl.enableVertexAttribArray(loc.life); gl.vertexAttribPointer(loc.life, 2, gl.FLOAT, false, stride, 8);
+    gl.enableVertexAttribArray(loc.kind); gl.vertexAttribPointer(loc.kind, 1, gl.FLOAT, false, stride, 16);
+    return v;
+  };
+  const vAll = vaoFor(20), vHaze = vaoFor(20 * HAZE);
+  const vQuad = gl.createVertexArray(); gl.bindVertexArray(vQuad); gl.bindBuffer(gl.ARRAY_BUFFER, bQ);
+  gl.enableVertexAttribArray(qa); gl.vertexAttribPointer(qa, 2, gl.FLOAT, false, 0, 0);
+  gl.bindVertexArray(null);
   const bg = (o.background || [0.047, 0.043, 0.04]);
 
   function resize() {
@@ -93,61 +113,75 @@ void main() {
       vel[i * 3] += ax * h; vel[i * 3 + 1] += ay * h; life[i * 2] = h;
     }
   }
-  function step(dt) {
-    t += dt;
+  // dt moves the particles; clock moves the Sun and the nucleus (they keep real time while the tail fast-forwards)
+  function step(dt, clock = dt) {
+    t += clock;
     if (t - sun.lastMove > 4 || !o.interactive) {
       const a = t * 0.14;
       sun.tx = nucleus.x + (o.sunOffset[0] + Math.cos(a) * 0.16) * o.scale;
       sun.ty = nucleus.y + (o.sunOffset[1] + Math.sin(a) * 0.24) * o.scale;
     }
-    sun.x += (sun.tx - sun.x) * (1 - Math.exp(-dt / 0.35));
-    sun.y += (sun.ty - sun.y) * (1 - Math.exp(-dt / 0.35));
+    sun.x += (sun.tx - sun.x) * (1 - Math.exp(-clock / 0.35));
+    sun.y += (sun.ty - sun.y) * (1 - Math.exp(-clock / 0.35));
     const hx = aspect * 0.5 * o.home[0], hy = o.home[1];
     const nx = hx + Math.sin(t * 0.07) * 0.03, ny = hy + Math.cos(t * 0.05) * 0.02;
     nucleus.vx = (nx - nucleus.x) * 2; nucleus.vy = (ny - nucleus.y) * 2; nucleus.x = nx; nucleus.y = ny;
     light = lightAt(Math.hypot(sun.x - nucleus.x, sun.y - nucleus.y)) * (1 + boost);
     light = Math.min(1, light);
-    boost *= Math.exp(-dt / 0.8);
+    boost *= Math.exp(-clock / 0.8);
     emit(dt);
     for (let i = 0; i < N; i++) {
-      const L = life[i * 2 + 1]; if (L <= 0) continue;
-      const a = (life[i * 2] += dt); if (a > L) { life[i * 2 + 1] = 0; continue; }
+      const L = life[i * 2 + 1]; if (L <= 0) { packed[i * 5 + 3] = 0; continue; }
+      const a = (life[i * 2] += dt); if (a > L) { life[i * 2 + 1] = 0; packed[i * 5 + 3] = 0; continue; }
       const k = i * 3, dx = pos[k] - sun.x, dy = pos[k + 1] - sun.y, r2 = dx * dx + dy * dy + 0.004, r = Math.sqrt(r2);
       const push = (kind[i] > 0.5 ? 0.02 * (0.75 + 0.5 * ((i * 0.618034) % 1)) : 0.0032 * (0.35 + (i % 9) / 9)) * o.scale * o.scale;
       const f = push / r2;
       vel[k] += (dx / r) * f * dt * 60; vel[k + 1] += (dy / r) * f * dt * 60;
       if (kind[i] > 0.5) { vel[k] *= 0.985; vel[k + 1] *= 0.985; vel[k] += (dx / r) * 0.005 * o.scale; vel[k + 1] += (dy / r) * 0.005 * o.scale; }
       pos[k] += vel[k] * dt; pos[k + 1] += vel[k + 1] * dt;
+      const j = i * 5; packed[j] = pos[k]; packed[j + 1] = pos[k + 1]; packed[j + 2] = a; packed[j + 3] = L; packed[j + 4] = kind[i];
     }
   }
   function draw() {
-    const scale = [1 / (aspect * 0.5), 1 / 0.5];
-    gl.disable(gl.BLEND); gl.useProgram(QP); gl.bindBuffer(gl.ARRAY_BUFFER, bQ);
-    const qa = gl.getAttribLocation(QP, "a"); gl.enableVertexAttribArray(qa); gl.vertexAttribPointer(qa, 2, gl.FLOAT, false, 0, 0);
-    gl.uniform2f(U(QP, "u_n"), nucleus.x, nucleus.y); gl.uniform2f(U(QP, "u_sun"), sun.x, sun.y); gl.uniform1f(U(QP, "u_light"), light);
-    gl.uniform2f(U(QP, "u_scale"), scale[0], scale[1]); gl.uniform3f(U(QP, "u_bg"), bg[0], bg[1], bg[2]);
-    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4); gl.disableVertexAttribArray(qa);
+    const sx = 1 / (aspect * 0.5), sy = 2;
+    gl.disable(gl.BLEND); gl.useProgram(QP); gl.bindVertexArray(vQuad);
+    gl.uniform2f(uq.u_n, nucleus.x, nucleus.y); gl.uniform2f(uq.u_sun, sun.x, sun.y); gl.uniform1f(uq.u_light, light);
+    gl.uniform2f(uq.u_scale, sx, sy); gl.uniform3f(uq.u_bg, bg[0], bg[1], bg[2]); gl.uniform1f(uq.u_grain, o.grain ?? 0.018);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
     gl.enable(gl.BLEND); gl.blendFunc(gl.ONE, gl.ONE); gl.useProgram(P);
-    const attr = (b, data, l, size) => { gl.bindBuffer(gl.ARRAY_BUFFER, b); gl.bufferData(gl.ARRAY_BUFFER, data, gl.DYNAMIC_DRAW); gl.enableVertexAttribArray(l); gl.vertexAttribPointer(l, size, gl.FLOAT, false, 0, 0); };
-    attr(bPos, pos, loc.pos, 3); attr(bLife, life, loc.life, 2); attr(bKind, kind, loc.kind, 1);
-    gl.uniform2f(U(P, "u_scale"), scale[0], scale[1]); gl.uniform1f(U(P, "u_px"), DPR * Math.max(0.7, H / 900) * 1.2); gl.uniform1f(U(P, "u_light"), light);
-    gl.uniform1f(U(P, "u_size"), 9.0); gl.uniform1f(U(P, "u_gain"), 0.06); gl.uniform1f(U(P, "u_sharp"), 2.0); gl.drawArrays(gl.POINTS, 0, N);
-    gl.uniform1f(U(P, "u_size"), 1.0); gl.uniform1f(U(P, "u_gain"), 0.9); gl.uniform1f(U(P, "u_sharp"), 4.0); gl.drawArrays(gl.POINTS, 0, N);
+    gl.bindBuffer(gl.ARRAY_BUFFER, bP); gl.bufferSubData(gl.ARRAY_BUFFER, 0, packed);
+    gl.uniform2f(up.u_scale, sx, sy); gl.uniform1f(up.u_px, DPR * Math.max(0.7, H / 900) * 1.2); gl.uniform1f(up.u_light, light);
+    gl.bindVertexArray(vHaze);
+    gl.uniform1f(up.u_size, 9.0); gl.uniform1f(up.u_gain, 0.06 * HAZE); gl.uniform1f(up.u_sharp, 2.0); gl.drawArrays(gl.POINTS, 0, Math.floor(N / HAZE));
+    gl.bindVertexArray(vAll);
+    gl.uniform1f(up.u_size, 1.0); gl.uniform1f(up.u_gain, 0.9); gl.uniform1f(up.u_sharp, 4.0); gl.drawArrays(gl.POINTS, 0, N);
+    gl.bindVertexArray(null);
   }
   const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let born = 0;
   function loop(now) {
-    const dt = last ? Math.min((now - last) / 1000, 1 / 30) : 1 / 60; last = now;
-    step(dt); draw();
     frame = running ? requestAnimationFrame(loop) : 0;
+    if (last && now - last < 15) return; // 60 fps is plenty for light this soft, and halves the work on 120 Hz screens
+    const dt = last ? Math.min((now - last) / 1000, 1 / 30) : 1 / 60; last = now;
+    // ignition: the first moments run fast, so the tail grows in front of you instead of being precomputed
+    if (!born) born = now;
+    const age = (now - born) / 1000, fast = age < 2.4 ? 1 + 5 * (1 - age / 2.4) ** 2 : 1;
+    if (fast > 1) { const sub = Math.ceil(fast * dt / (1 / 20)); for (let i = 0; i < sub; i++) step((fast * dt) / sub, dt / sub); } else step(dt);
+    draw();
   }
   function start() { if (running || still) return; running = true; last = 0; frame = requestAnimationFrame(loop); }
   function stop() { running = false; if (frame) cancelAnimationFrame(frame); frame = 0; }
   resize();
   new ResizeObserver(() => { resize(); if (!running) draw(); }).observe(canvas);
   nucleus.x = aspect * 0.5 * o.home[0]; nucleus.y = o.home[1];
-  sun.x = sun.tx = nucleus.x + o.sunOffset[0] * o.scale; sun.y = sun.ty = nucleus.y + o.sunOffset[1] * o.scale;
-  // warm up so the first frame is already a comet
-  for (let i = 0; i < (o.warm ?? 600); i++) step(1 / 60);
+  // start the clock where the old 10 s warm-up left it, with the drifting Sun already in place
+  t = 10;
+  const a0 = t * 0.14;
+  sun.x = sun.tx = nucleus.x + (o.sunOffset[0] + Math.cos(a0) * 0.16) * o.scale;
+  sun.y = sun.ty = nucleus.y + (o.sunOffset[1] + Math.sin(a0) * 0.24) * o.scale;
+  sun.lastMove = -99;
+  // a short warm-up only (about 2 ms); the rest of the tail grows live, fast-forwarded, in the first seconds
+  for (let i = 0; i < (o.warm ?? 8); i++) step(1 / 30);
   draw();
   if (o.interactive) {
     (o.pointerTarget || canvas).addEventListener("pointermove", (e) => {
@@ -161,6 +195,6 @@ void main() {
     start, stop, draw,
     flare() { boost = 0.9; },
     screenPos() { const r = canvas.getBoundingClientRect(); return [r.left + ((nucleus.x / (aspect * 0.5)) * 0.5 + 0.5) * r.width, r.top + (0.5 - nucleus.y) * r.height]; },
-    holdFor(seconds) { for (let i = 0; i < seconds * 60; i++) step(1 / 60); draw(); },
+    holdFor(seconds) { for (let i = 0; i < seconds * 20; i++) step(1 / 20); draw(); },
   };
 }

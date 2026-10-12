@@ -25,15 +25,15 @@ const ld = { "@context": "https://schema.org", "@type": "SoftwareSourceCode", na
 <Base title={`${p.name}: ${p.tagline} | Halley`} description={p.summary || p.tagline} jsonld={[ld]}>
   <section class="hero"><div class="frame grid-12">
     <div class="h-copy">
-      <nav class="crumbs t-data reveal" aria-label="Breadcrumb"><a href="/work/">Open source</a><span>/</span><span>{p.category}</span></nav>
-      <h1 class="t-h1 reveal" data-delay="1">{p.name}</h1>
-      <p class="t-lede tag reveal" data-delay="2">{p.tagline}</p>
-      <div class="acts reveal" data-delay="3">
+      <nav class="crumbs t-data enter" aria-label="Breadcrumb"><a href="/work/">Open source</a><span>/</span><span>{p.category}</span></nav>
+      <h1 class="t-h1 enter" style="--d:1">{p.name}</h1>
+      <p class="t-lede tag enter" style="--d:2">{p.tagline}</p>
+      <div class="acts enter" style="--d:3">
         <Button href={`https://github.com/${p.repo}`} icon="github">View the source</Button>
         {extra.slice(0, 2).map(([k, v]) => <Button href={v} variant="line" icon="arrow-up-right">{linkLabel[k]}</Button>)}
       </div>
     </div>
-    <dl class="facts reveal" data-delay="2">
+    <dl class="facts enter" style="--d:2">
       <div><dt class="t-label">Area</dt><dd>{p.category}</dd></div>
       <div><dt class="t-label">Language</dt><dd>{p.language}</dd></div>
       <div><dt class="t-label">License</dt><dd>{p.license}</dd></div>
@@ -45,13 +45,13 @@ const ld = { "@context": "https://schema.org", "@type": "SoftwareSourceCode", na
 
   <section class="stage"><div class="frame">
     {p.demo ? (
-      <figure class="demo reveal" style={`aspect-ratio:${p.demo.w}/${p.demo.h}`}>
+      <figure class="demo enter" style={`aspect-ratio:${p.demo.w}/${p.demo.h}`}>
         <video muted loop playsinline preload="none" poster={p.demo.poster} data-autoplay><source src={p.demo.src} type="video/mp4" /></video>
       </figure>
     ) : figureUrl(p.slug) ? (
       <FigureCard slug={p.slug} no={idx} title={p.name} />
     ) : (
-      <figure class="engr reveal" data-reveal-plate><svg class="art" viewBox="0 0 240 160" aria-hidden="true" set:html={ART[p.slug] ?? ""} /></figure>
+      <figure class="engr enter" data-reveal-plate><svg class="art" viewBox="0 0 240 160" aria-hidden="true" set:html={ART[p.slug] ?? ""} /></figure>
     )}
   </div></section>
 

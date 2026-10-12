@@ -37,7 +37,9 @@ const nav = [
     hd.classList.toggle("is-night", over);
     hd.classList.toggle("is-scrolled", scrollY > 8);
   };
-  addEventListener("scroll", tone, { passive: true }); addEventListener("resize", tone); addEventListener("halley:tone", tone); tone();
+  let queued = false;
+  const later = () => { if (!queued) { queued = true; requestAnimationFrame(() => { queued = false; tone(); }); } };
+  addEventListener("scroll", later, { passive: true }); addEventListener("resize", later); addEventListener("halley:tone", later); tone();
   const btn = document.querySelector<HTMLButtonElement>("[data-menu]")!, drawer = document.querySelector<HTMLElement>("[data-drawer]")!;
   btn.addEventListener("click", () => {
     const open = btn.getAttribute("aria-expanded") !== "true";
@@ -50,8 +52,12 @@ const nav = [
 
 <style>
   .hd { position: fixed; inset: 0 0 auto 0; z-index: 50; color: var(--color-t1); transition: color .5s var(--ease); }
-  .hd::before { content: ""; position: absolute; inset: 0; background: color-mix(in srgb, var(--color-paper) 84%, transparent); backdrop-filter: blur(18px) saturate(1.1); -webkit-backdrop-filter: blur(18px) saturate(1.1); box-shadow: 0 1px 0 var(--color-rule-2); opacity: 0; transition: opacity .5s var(--ease); }
+  .hd::before { content: ""; position: absolute; inset: 0; background: color-mix(in srgb, var(--color-paper) 96%, transparent); box-shadow: 0 1px 0 var(--color-rule-2); opacity: 0; transition: opacity .5s var(--ease); }
   .hd.is-scrolled::before { opacity: 1; }
+  /* frosted glass only where there is GPU headroom to spare: desktops with a fine pointer */
+  @media (hover: hover) and (pointer: fine) {
+    .hd::before { background: color-mix(in srgb, var(--color-paper) 84%, transparent); backdrop-filter: blur(18px) saturate(1.1); -webkit-backdrop-filter: blur(18px) saturate(1.1); }
+  }
   .hd.is-night { color: var(--color-d1); }
   .hd.is-night::before { opacity: 0; }
   .bar { position: relative; display: flex; align-items: center; justify-content: space-between; height: 72px; }

@@ -41,7 +41,7 @@ export const projects: Project[] = Object.values(files)
       ...p,
       stars: g.stars ?? 0,
       releases: g.releases ?? [],
-      demo: hero ? { src: hero.src.replace("/assets/media/", "/media/"), poster: hero.poster.replace("/assets/media/", "/media/"), w: hero.w, h: hero.h } : undefined,
+      demo: hero ? { src: hero.src.replace("/assets/media/", "/media/"), poster: hero.poster.replace("/assets/media/", "/media/").replace(/\.jpg$/, ".webp"), w: hero.w, h: hero.h } : undefined,
     } as Project;
   })
   .sort((a, b) => CATEGORY_ORDER.indexOf(a.category) - CATEGORY_ORDER.indexOf(b.category) || b.stars - a.stars || a.name.localeCompare(b.name));
