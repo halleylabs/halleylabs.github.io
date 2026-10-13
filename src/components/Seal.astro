@@ -1,11 +1,11 @@
 ---
 import Icon from "./Icon.astro";
-interface Props { initial: string; name: string; role?: string; href?: string; open?: boolean; links?: { kind: "github" | "x" | "linkedin" | "globe"; href: string; label: string }[] }
-const { initial, name, role = "Collaborator", href, open = false, links = [] } = Astro.props;
+interface Props { initial: string; name: string; role?: string; href?: string; open?: boolean; links?: { kind: "github" | "x" | "linkedin" | "globe" | "mail"; href: string; label: string }[]; class?: string; delay?: string }
+const { initial, name, role = "Collaborator", href, open = false, links = [], class: cls, delay } = Astro.props;
 const id = `rim-${name.toLowerCase().replace(/[^a-z]+/g, "-")}`;
 const rim = open ? "Your name here · Build with us · Halley ·" : `${name} · ${role} · Halley · MMXXVI ·`;
 ---
-<figure class:list={["seal", { open }]}>
+<figure class:list={["seal", cls, { open }]} data-delay={delay}>
   <a class="disc" href={href} aria-label={open ? "Build with us" : name}>
     <svg viewBox="0 0 200 200" aria-hidden="true">
       <defs><path id={id} d="M100,100 m-79,0 a79,79 0 1,1 158,0 a79,79 0 1,1 -158,0" /></defs>
@@ -17,15 +17,14 @@ const rim = open ? "Your name here · Build with us · Halley ·" : `${name} · 
   </a>
   <figcaption>
     <b>{open ? "You, maybe" : name}</b>
-    <span>{open ? "hello@halleylabs.dev" : role}</span>
-    {links.length > 0 && (
-      <span class="links">{links.map((l) => <a href={l.href} aria-label={`${name} on ${l.label}`}><Icon name={l.kind} size={15} /></a>)}</span>
-    )}
+    <span class="role">{role}</span>
+    <span class="links">{links.map((l) => <a href={l.href} aria-label={open ? l.label : `${name} on ${l.label}`}><Icon name={l.kind} size={15} /></a>)}</span>
   </figcaption>
 </figure>
 
 <style>
-  .seal { margin: 0; display: flex; flex-direction: column; align-items: center; text-align: center; }
+  /* four shared rows: disc, name, role, links. Siblings in a row line up whatever the name length. */
+  .seal { margin: 0; display: grid; grid-row: span 4; grid-template-rows: subgrid; row-gap: 0; justify-items: center; align-items: start; text-align: center; }
   .disc { display: block; width: 100%; max-width: 208px; border-radius: 50%; }
   svg { width: 100%; height: auto; overflow: visible; }
   .outer { fill: var(--color-paper); stroke: var(--color-t1); stroke-width: 1.4; transition: fill var(--t-mark) var(--ease); }
@@ -35,12 +34,20 @@ const rim = open ? "Your name here · Build with us · Halley ·" : `${name} · 
   .mono { font: 380 80px var(--font-serif); font-variation-settings: "opsz" 144, "SOFT" 70; text-anchor: middle; fill: var(--color-t1); }
   .open .outer { stroke: var(--color-t3); stroke-dasharray: 2.5 5; }
   .open .mono { font: 300 56px var(--font-sans); fill: var(--color-t3); }
-  figcaption { margin-top: 18px; display: flex; flex-direction: column; align-items: center; gap: 4px; }
-  b { font: 460 20px/1.2 var(--font-serif); font-variation-settings: "opsz" 72, "SOFT" 40; letter-spacing: -0.01em; }
-  figcaption > span { color: var(--color-t3); font-size: 14.5px; }
-  .links { display: flex; gap: 6px; margin-top: 6px; }
+  figcaption { display: contents; }
+  b { margin-top: 18px; text-wrap: balance; font: 460 20px/1.2 var(--font-serif); font-variation-settings: "opsz" 72, "SOFT" 40; letter-spacing: -0.01em; }
+  .role { margin-top: 4px; color: var(--color-t3); font-size: 14.5px; }
+  .links { display: flex; gap: 6px; margin-top: 10px; min-height: 24px; }
   .links a { display: grid; place-items: center; width: 32px; height: 32px; margin: -4px; border-radius: 50%; color: var(--color-t3); transition: color var(--t-hover) var(--ease), background-color var(--t-hover) var(--ease); }
   .links a:hover { color: var(--color-t1); background: var(--color-paper-2); }
+  /* phones: one row per collaborator, seal on the left, the same three lines beside it for everyone */
+  @media (max-width: 640px) {
+    .seal { grid-row: auto; grid-template-rows: auto auto auto; grid-template-columns: 104px 1fr; column-gap: 20px; justify-items: start; align-content: center; text-align: left; }
+    .disc { grid-column: 1; grid-row: 1 / span 3; align-self: center; }
+    b { grid-column: 2; margin-top: 0; align-self: end; white-space: nowrap; }
+    .role { grid-column: 2; }
+    .links { grid-column: 2; margin-top: 8px; margin-left: -4px; }
+  }
   @media (hover: hover) and (pointer: fine) {
     .disc:hover .rim { transform: rotate(-42deg); }
     .disc:hover .outer { fill: #fffdf8; }

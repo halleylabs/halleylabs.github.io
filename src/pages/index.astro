@@ -4,7 +4,7 @@ import Button from "../components/Button.astro";
 import SectionHead from "../components/SectionHead.astro";
 import Plate from "../components/Plate.astro";
 import Almanac from "../components/Almanac.astro";
-import Seal from "../components/Seal.astro";
+import Seals from "../components/Seals.astro";
 import { featured, projects } from "../lib/projects";
 
 const org = {
@@ -86,11 +86,7 @@ const org = {
       <p class="pp-lead">There are no ranks at Halley. Everyone here is a collaborator, and every project carries the names of the people who made it. If you want to build a flagship or keep an open-source project alive with us, there is a seal waiting for you.</p>
       <Button href="mailto:hello@halleylabs.dev?subject=Build%20with%20Halley">Build with us</Button>
     </div>
-    <div class="seals">
-      <div class="reveal"><Seal initial="A" name="Anzal Husain Abidi" href="https://anzalabidi.dev" links={[{ kind: "github", href: "https://github.com/anzal1", label: "GitHub" }, { kind: "linkedin", href: "https://www.linkedin.com/in/anzal-husain-abidi-740a40204", label: "LinkedIn" }, { kind: "x", href: "https://x.com/AnzalAbidi", label: "X" }]} /></div>
-      <div class="reveal" data-delay="1"><Seal initial="F" name="Faiz Ullah" href="https://faiz-ai.dev" links={[{ kind: "github", href: "https://github.com/Faizullah9181", label: "GitHub" }, { kind: "globe", href: "https://faiz-ai.dev", label: "website" }, { kind: "x", href: "https://x.com/dot_ragnar", label: "X" }]} /></div>
-      <div class="reveal" data-delay="2"><Seal initial="+" name="You" open href="mailto:hello@halleylabs.dev?subject=Build%20with%20Halley" /></div>
-    </div>
+    <div class="seals-slot"><Seals /></div>
   </div></section>
 </Base>
 
@@ -220,13 +216,13 @@ const org = {
   .pp-copy { grid-column: 1 / span 4; }
   .pp-copy .t-h2 { margin-bottom: 20px; }
   .pp-lead { color: var(--color-t2); margin-bottom: 32px; }
-  .seals { grid-column: 6 / span 7; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--col-gap); align-items: start; }
+  .seals-slot { grid-column: 6 / span 7; }
 
   @media (max-width: 980px) {
-    .fl-copy, .aperture, .pp-copy, .seals { grid-column: 1 / -1; }
+    .fl-copy, .aperture, .pp-copy, .seals-slot { grid-column: 1 / -1; }
     .aperture { margin-top: 48px; }
-    .seals { margin-top: 48px; }
+    .seals-slot { margin-top: 48px; }
     .plates { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   }
-  @media (max-width: 640px) { .plates { grid-template-columns: 1fr; } .seals { gap: 14px; } }
+  @media (max-width: 640px) { .plates { grid-template-columns: 1fr; } .seals-slot { gap: 14px; } }
 </style>

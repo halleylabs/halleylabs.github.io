@@ -66,7 +66,8 @@ const ld = { "@context": "https://schema.org", "@type": "SoftwareSourceCode", na
         {p.metrics.map((m, i) => { const h = srcHref(m); return (
           <li class="reveal" data-delay={String(i)}>
             <b>{m.value}</b>
-            <p>{m.label}.{h && <a class="src t-data" href={h}>source<Icon name="arrow-up-right" size={12} /></a>}</p>
+            <p>{m.label}.</p>
+            {h ? <a class="src t-data" href={h}>source<Icon name="arrow-up-right" size={12} /></a> : <span />}
           </li>
         ); })}
       </ol>
@@ -137,7 +138,9 @@ const ld = { "@context": "https://schema.org", "@type": "SoftwareSourceCode", na
   .proof { padding-bottom: clamp(72px, 8vw, 120px); }
   .lab { color: var(--color-t3); margin-bottom: 26px; }
   .metrics { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 var(--col-gap); border-top: 1px solid var(--color-rule); }
-  .metrics li { padding-top: 26px; }
+  /* value, label, source: three shared rows, so every figure, label and source link lines up across the row */
+  .metrics li { padding-top: 26px; display: grid; grid-row: span 3; grid-template-rows: subgrid; row-gap: 0; align-items: start; }
+  .metrics li .src { justify-self: start; margin: 10px 0 0; }
   .metrics b { display: block; font: 380 clamp(44px, 4.6vw, 68px)/1 var(--font-serif); font-variation-settings: "opsz" 144, "SOFT" 30; letter-spacing: -0.03em; }
   .metrics p { margin-top: 14px; color: var(--color-t2); font-size: 16px; }
   .src { display: inline-flex; align-items: center; gap: 3px; margin-left: 8px; color: var(--color-t3); white-space: nowrap; border-bottom: 1px solid var(--color-rule); }

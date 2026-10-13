@@ -1,7 +1,7 @@
 ---
 import Base from "../layouts/Base.astro";
 import Button from "../components/Button.astro";
-import Seal from "../components/Seal.astro";
+import Seals from "../components/Seals.astro";
 import sealRaw from "../assets/seal.svg?raw";
 const seal = sealRaw.replace('class="seal-svg seal-light"', 'class="plate-seal"');
 const rules = [
@@ -34,11 +34,7 @@ const rules = [
 
   <section class="section people" id="people" style="padding-top:0"><div class="frame grid-12">
     <div class="pc reveal"><p class="t-label lab">The people</p><h2 class="t-h2">Friends who build together, with room for more.</h2><p class="pl">If you want to build a flagship or keep an open-source project alive with us, write to us. Tell us what you want to build.</p><Button href="mailto:hello@halleylabs.dev?subject=Build%20with%20Halley">Build with us</Button></div>
-    <div class="seals">
-      <div class="reveal"><Seal initial="A" name="Anzal Husain Abidi" href="https://anzalabidi.dev" links={[{ kind: "github", href: "https://github.com/anzal1", label: "GitHub" }, { kind: "linkedin", href: "https://www.linkedin.com/in/anzal-husain-abidi-740a40204", label: "LinkedIn" }, { kind: "x", href: "https://x.com/AnzalAbidi", label: "X" }]} /></div>
-      <div class="reveal" data-delay="1"><Seal initial="F" name="Faiz Ullah" href="https://faiz-ai.dev" links={[{ kind: "github", href: "https://github.com/Faizullah9181", label: "GitHub" }, { kind: "globe", href: "https://faiz-ai.dev", label: "website" }, { kind: "x", href: "https://x.com/dot_ragnar", label: "X" }]} /></div>
-      <div class="reveal" data-delay="2"><Seal initial="+" name="You" open href="mailto:hello@halleylabs.dev?subject=Build%20with%20Halley" /></div>
-    </div>
+    <div class="seals-slot"><Seals /></div>
   </div></section>
 </Base>
 
@@ -52,15 +48,16 @@ const rules = [
   .txt { grid-column: 7 / span 6; align-self: center; }
   .txt .t-h2 { margin-bottom: 26px; }
   .txt p:not(.lab) { color: var(--color-t2); font-size: clamp(17px, 1.3vw, 19px); margin-bottom: 18px; }
-  .rl { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0 var(--col-gap); border-top: 1px solid var(--color-rule); }
-  .rl li { padding-top: 24px; }
+  .rl { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0 var(--col-gap); row-gap: 0; border-top: 1px solid var(--color-rule); }
+  /* number, title, text: shared rows, so a title that wraps never pushes its text out of line */
+  .rl li { padding-top: 24px; display: grid; grid-row: span 3; grid-template-rows: subgrid; row-gap: 0; align-items: start; }
   .rl .t-data { color: var(--color-t3); }
   .rl h3 { margin: 34px 0 12px; }
   .rl p { color: var(--color-t2); font-size: 16px; }
   .pc { grid-column: 1 / span 4; }
   .pc .t-h2 { margin-bottom: 20px; }
   .pl { color: var(--color-t2); margin-bottom: 30px; }
-  .seals { grid-column: 6 / span 7; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--col-gap); }
-  @media (max-width: 980px) { .h, .lede, .story .art, .txt, .pc, .seals { grid-column: 1 / -1; } .lede, .txt, .seals { margin-top: 32px; } .rl { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px var(--col-gap); } }
+  .seals-slot { grid-column: 6 / span 7; }
+  @media (max-width: 980px) { .h, .lede, .story .art, .txt, .pc, .seals-slot { grid-column: 1 / -1; } .lede, .txt, .seals-slot { margin-top: 32px; } .rl { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px var(--col-gap); } }
   @media (max-width: 560px) { .rl { grid-template-columns: 1fr; } }
 </style>

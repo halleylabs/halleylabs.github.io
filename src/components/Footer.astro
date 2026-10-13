@@ -10,7 +10,7 @@ const cols = [
 <footer class="ft on-night" data-tone="night">
   <div class="sky" aria-hidden="true"><span class="streak"></span></div>
   <div class="frame">
-    <p class="ret">The comet comes back on 28 July 2061.</p>
+    <p class="ret">The comet comes back on <span class="nb">28 July 2061.</span></p>
     <p class="t-data cnt" data-countdown>We will still be building.</p>
     <div class="cols">
       <div class="brand"><a href="/" aria-label="Halley, home"><Mark size={26} /><span>halley</span></a><p>An independent AI lab. A home for the people who build with us, our flagships, and the open source behind them.</p></div>
@@ -34,6 +34,7 @@ const cols = [
 </script>
 
 <style>
+  .nb { white-space: nowrap; }
   .ft { position: relative; overflow: hidden; padding: clamp(96px, 10vw, 140px) 0 28px; }
   .sky { position: absolute; inset: 0; pointer-events: none; }
   .streak { position: absolute; top: 22%; left: -24%; width: 22%; height: 1px; background: linear-gradient(90deg, transparent, rgba(200,55,31,.55) 70%, #ffe8da); filter: drop-shadow(0 0 6px rgba(255,140,100,.7)); transform: rotate(-7deg); animation: pass 16s linear infinite; }

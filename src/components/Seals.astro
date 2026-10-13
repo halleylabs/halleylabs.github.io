@@ -1,0 +1,14 @@
+---
+import Seal from "./Seal.astro";
+// The people of Halley. One component for every page that shows them, so they always line up the same way.
+---
+<div class="seals">
+  <Seal class="reveal" initial="A" name="Anzal Husain Abidi" href="https://anzalabidi.dev" links={[{ kind: "github", href: "https://github.com/anzal1", label: "GitHub" }, { kind: "linkedin", href: "https://www.linkedin.com/in/anzal-husain-abidi-740a40204", label: "LinkedIn" }, { kind: "x", href: "https://x.com/AnzalAbidi", label: "X" }]} />
+  <Seal class="reveal" delay="1" initial="F" name="Faiz Ullah" href="https://faiz-ai.dev" links={[{ kind: "github", href: "https://github.com/Faizullah9181", label: "GitHub" }, { kind: "globe", href: "https://faiz-ai.dev", label: "website" }, { kind: "x", href: "https://x.com/dot_ragnar", label: "X" }]} />
+  <Seal class="reveal" delay="2" initial="+" name="You" open href="mailto:hello@halleylabs.dev?subject=Build%20with%20Halley" links={[{ kind: "mail", href: "mailto:hello@halleylabs.dev?subject=Build%20with%20Halley", label: "Write to hello@halleylabs.dev" }]} />
+</div>
+
+<style>
+  .seals { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: var(--col-gap); row-gap: 40px; align-items: start; }
+  @media (max-width: 640px) { .seals { grid-template-columns: 1fr; row-gap: 22px; } }
+</style>
